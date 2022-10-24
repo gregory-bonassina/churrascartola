@@ -50,7 +50,9 @@ export function MarketState() {
     const marketCloseDate = `${zeroPad(market.fechamento.dia)}/${zeroPad(
         market.fechamento.mes,
     )}/${market.fechamento.ano}`
-    const marketCloseTime = `${market.fechamento.hora}:${market.fechamento.minuto}:00`
+    const marketCloseTime = `${market.fechamento.hora}:${zeroPad(
+        market.fechamento.minuto,
+    )}:00`
 
     return (
         <MarketStateContainer>
