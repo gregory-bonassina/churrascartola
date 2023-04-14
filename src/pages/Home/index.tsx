@@ -135,8 +135,6 @@ export function Home() {
             : 0
     })
 
-    console.log(orderedTeams)
-
     return (
         <HomeContainer>
             <TeamsTable>

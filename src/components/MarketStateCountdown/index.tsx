@@ -24,9 +24,9 @@ export function MarketStateCountdown({
         .map(zeroPad)
         .join(':')
 
-    const formattedDateWithDays = duration.days
-        ? `${duration.days}D ${formattedDate}`
-        : ''
+    const formattedDateWithDays = `${
+        duration.days ? duration.days : 0
+    }D ${formattedDate}`
 
     useEffect(() => {
         const interval = setInterval(() => {
