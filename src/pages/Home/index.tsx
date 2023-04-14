@@ -94,8 +94,6 @@ export function Home() {
 
         setLeagueData(data)
 
-        console.log(data)
-
         // data.times.forEach((team) => {
         //     fetchTeam(team.time_id)
         // })
@@ -136,6 +134,10 @@ export function Home() {
             : 0
     })
 
+    const appendData = (data: number | string) => {
+        return data || '--'
+    }
+
     return (
         <HomeContainer>
             <TeamsTable>
@@ -163,9 +165,13 @@ export function Home() {
                                 </UserContainer>
                             </td>
                             <td>0/12</td>
-                            <td>{team.pontos.rodada?.toFixed(2)}</td>
-                            <td>{team.pontos.campeonato}</td>
-                            <td>{team.ranking.campeonato}º</td>
+                            <td>
+                                {appendData(team.pontos.rodada?.toFixed(2))}
+                            </td>
+                            <td>{appendData(team.pontos.campeonato)}</td>
+                            <td>{`${appendData(
+                                team.ranking.campeonato,
+                            )} º`}</td>
                         </tr>
                     ))}
                 </tbody>

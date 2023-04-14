@@ -44,8 +44,6 @@ export function MarketStateProvider({ children }: MarketStateProviderProps) {
 
     const loadMarket = useCallback(async () => {
         const response = await apiCartola.get('mercado/status')
-        console.log(response)
-
         setMarket(response.data)
     }, [])
 
