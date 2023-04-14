@@ -82,7 +82,7 @@ export function Home() {
     /* Trás os valores da liga */
     const loadLeagueData = async () => {
         const response = await apiCartola.get<LeagueDataProps>(
-            'auth/liga/copa-churrasco-23',
+            `auth/liga/${import.meta.env.VITE_LIGA}`,
             {
                 headers: {
                     'X-GLB-Token': import.meta.env.VITE_GLBID,

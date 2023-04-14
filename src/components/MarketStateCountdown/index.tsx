@@ -20,10 +20,13 @@ export function MarketStateCountdown({
 
     const zeroPad = (num: number | undefined) => String(num).padStart(2, '0')
 
-    const formatted = [duration.hours, duration.minutes, duration.seconds]
-        .filter(Boolean)
+    const formattedDate = [duration.hours, duration.minutes, duration.seconds]
         .map(zeroPad)
         .join(':')
+
+    const formattedDateWithDays = duration.days
+        ? `${duration.days}D ${formattedDate}`
+        : ''
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -50,7 +53,7 @@ export function MarketStateCountdown({
     return (
         <span>
             <Timer size={24} />
-            {formatted}
+            {formattedDateWithDays}
         </span>
     )
 }
