@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { apiCartola } from '../../lib/axios'
 import {
     AvatarContainer,
-    HomeContainer,
     NamesContainer,
     TeamsTable,
     UserContainer,
@@ -139,43 +138,37 @@ export function Home() {
     }
 
     return (
-        <HomeContainer>
-            <TeamsTable>
-                <thead>
-                    <tr>
-                        <th>TIME</th>
-                        <th>JOG. PONTUADOS</th>
-                        <th>RODADA</th>
-                        <th>TOTAL</th>
-                        <th>POSIÇÃO</th>
+        <TeamsTable>
+            <thead>
+                <tr>
+                    <th>TIME</th>
+                    <th>JOG. PONTUADOS</th>
+                    <th>RODADA</th>
+                    <th>TOTAL</th>
+                    <th>POSIÇÃO</th>
+                </tr>
+            </thead>
+            <tbody>
+                {orderedTeams.map((team) => (
+                    <tr key={team.time_id}>
+                        <td width="50%">
+                            <UserContainer>
+                                <AvatarContainer>
+                                    <img src={team.url_escudo_svg} alt="" />
+                                </AvatarContainer>
+                                <NamesContainer>
+                                    <strong>{team.nome}</strong>
+                                    <span>{team.nome_cartola}</span>
+                                </NamesContainer>
+                            </UserContainer>
+                        </td>
+                        <td>0/12</td>
+                        <td>{appendData(team.pontos.rodada?.toFixed(2))}</td>
+                        <td>{appendData(team.pontos.campeonato)}</td>
+                        <td>{`${appendData(team.ranking.campeonato)} º`}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    {orderedTeams.map((team) => (
-                        <tr key={team.time_id}>
-                            <td width="50%">
-                                <UserContainer>
-                                    <AvatarContainer>
-                                        <img src={team.url_escudo_svg} alt="" />
-                                    </AvatarContainer>
-                                    <NamesContainer>
-                                        <strong>{team.nome}</strong>
-                                        <span>{team.nome_cartola}</span>
-                                    </NamesContainer>
-                                </UserContainer>
-                            </td>
-                            <td>0/12</td>
-                            <td>
-                                {appendData(team.pontos.rodada?.toFixed(2))}
-                            </td>
-                            <td>{appendData(team.pontos.campeonato)}</td>
-                            <td>{`${appendData(
-                                team.ranking.campeonato,
-                            )} º`}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </TeamsTable>
-        </HomeContainer>
+                ))}
+            </tbody>
+        </TeamsTable>
     )
 }
