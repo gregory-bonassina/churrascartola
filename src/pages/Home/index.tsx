@@ -39,45 +39,45 @@ interface LeagueDataProps {
     times: TeamProps[]
 }
 
-interface PlayerScored {
-    playerId: {
-        nickname: string
-        photoUrl: string
-        score: number
-        positionId: number
-        teamId: number
-        played: boolean
-    }
-}
+// interface PlayerScored {
+//     playerId: {
+//         nickname: string
+//         photoUrl: string
+//         score: number
+//         positionId: number
+//         teamId: number
+//         played: boolean
+//     }
+// }
 
-interface PlayersScoredProps {
-    atletas: PlayerScored[]
-}
+// interface PlayersScoredProps {
+//     atletas: PlayerScored[]
+// }
 
-interface PlayerProps {
-    atleta_id: number
-    clube_id: number
-    posicao_id: number
-    status_id: number
-    nickname: string
-    name: string
-    photoUrl: string
-}
+// interface PlayerProps {
+//     atleta_id: number
+//     clube_id: number
+//     posicao_id: number
+//     status_id: number
+//     nickname: string
+//     name: string
+//     photoUrl: string
+// }
 
-interface TeamsPlayersProps {
-    atletas: PlayerProps[]
-    reservas: PlayerProps[]
-}
+// interface TeamsPlayersProps {
+//     atletas: PlayerProps[]
+//     reservas: PlayerProps[]
+// }
 
 export function Home() {
     const [leagueData, setLeagueData] = useState<LeagueDataProps>({
         times: [],
     })
-    const [playersScored, setPlayersScored] = useState<PlayersScoredProps>({
-        atletas: [],
-    })
-    // eslint-disable-next-line no-unused-vars
-    const [teamsPlayers, setTeamsPlayers] = useState<TeamsPlayersProps[]>([])
+    // const [playersScored, setPlayersScored] = useState<PlayersScoredProps>({
+    //     atletas: [],
+    // })
+    // // eslint-disable-next-line no-unused-vars
+    // const [teamsPlayers, setTeamsPlayers] = useState<TeamsPlayersProps[]>([])
 
     /* Trás os valores da liga */
     const loadLeagueData = async () => {
@@ -94,38 +94,39 @@ export function Home() {
 
         setLeagueData(data)
 
-        data.times.forEach((team) => {
-            fetchTeam(team.time_id)
-        })
+        console.log(data)
+
+        // data.times.forEach((team) => {
+        //     fetchTeam(team.time_id)
+        // })
     }
 
     /* Trás as escalações dos times na rodada */
-    const fetchTeam = async (teamId: number) => {
-        const response = await apiCartola.get<TeamsPlayersProps>(
-            `time/id/${teamId}`,
-        )
-
-        setTeamsPlayers((prevState) => [...prevState, response.data])
-    }
+    // const fetchTeam = async (teamId: number) => {
+    // const response = await apiCartola.get<TeamsPlayersProps>(
+    //     `time/id/${teamId}`,
+    // )
+    // setTeamsPlayers((prevState) => [...prevState, response.data])
+    // }
 
     /* Trás os jogadores que jogaram/pontuaram na rodada */
-    const loadPlayersScored = async () => {
-        const response = await apiCartola.get<PlayersScoredProps>(
-            'atletas/pontuados',
-        )
+    // const loadPlayersScored = async () => {
+    //     const response = await apiCartola.get<PlayersScoredProps>(
+    //         'atletas/pontuados',
+    //     )
 
-        setPlayersScored(response.data)
-    }
+    //     setPlayersScored(response.data)
+    // }
 
     useEffect(() => {
         loadLeagueData()
-        loadPlayersScored()
+        // loadPlayersScored()
     }, [])
 
     const { times } = leagueData
 
     // eslint-disable-next-line no-unused-vars
-    const { atletas } = playersScored
+    // const { atletas } = playersScored
 
     const orderedTeams = times.sort(function (a, b) {
         return a.ranking.campeonato < b.ranking.campeonato
