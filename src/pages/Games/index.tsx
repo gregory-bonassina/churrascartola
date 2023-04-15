@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { useCallback, useContext, useEffect, useState } from 'react'
-import { TeamContent, TeamsContainer } from './styles'
+import { TeamContent, TeamsContainer, ValidGame } from './styles'
 import { MarketStateContext } from '../../contexts/MarketStateContext'
 import { apiCartola } from '../../lib/axios'
 import { format } from 'date-fns'
@@ -31,6 +31,7 @@ interface Game {
     clube_visitante_posicao: number
     placar_oficial_mandante: number
     placar_oficial_visitante: number
+    valida: boolean
 }
 
 interface GameDataProps {
@@ -97,6 +98,11 @@ export function Games() {
                     <tr key={game.partida_id}>
                         <td width="50%">
                             <TeamsContainer>
+                                {!game.valida && (
+                                    <ValidGame>
+                                        * rodada não é válida para o Cartola
+                                    </ValidGame>
+                                )}
                                 <TeamContent alignContent="left">
                                     {game.clube_casa_posicao}º
                                     <img
