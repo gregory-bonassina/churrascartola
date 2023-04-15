@@ -1,11 +1,7 @@
 import { useEffect, useState } from 'react'
 import { apiCartola } from '../../lib/axios'
-import {
-    AvatarContainer,
-    NamesContainer,
-    TeamsTable,
-    UserContainer,
-} from './styles'
+import { AvatarContainer, NamesContainer, UserContainer } from './styles'
+import { DefaultTable } from '../../components/DefaultTable'
 
 interface RankingProps {
     campeonato: number
@@ -138,7 +134,7 @@ export function Home() {
     }
 
     return (
-        <TeamsTable>
+        <DefaultTable>
             <thead>
                 <tr>
                     <th>TIME</th>
@@ -169,6 +165,6 @@ export function Home() {
                     </tr>
                 ))}
             </tbody>
-        </TeamsTable>
+        </DefaultTable>
     )
 }

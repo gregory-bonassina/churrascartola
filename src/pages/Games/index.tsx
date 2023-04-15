@@ -1,10 +1,11 @@
 /* eslint-disable camelcase */
 import { useCallback, useContext, useEffect, useState } from 'react'
-import { GamesTable, TeamContent, TeamsContainer } from './styles'
+import { TeamContent, TeamsContainer } from './styles'
 import { MarketStateContext } from '../../contexts/MarketStateContext'
 import { apiCartola } from '../../lib/axios'
 import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
+import { DefaultTable } from '../../components/DefaultTable'
 
 interface TeamShields {
     '30x30': string
@@ -83,7 +84,7 @@ export function Games() {
     }
 
     return (
-        <GamesTable>
+        <DefaultTable>
             <thead>
                 <tr>
                     <th>TIMES</th>
@@ -134,6 +135,6 @@ export function Games() {
                     </tr>
                 ))}
             </tbody>
-        </GamesTable>
+        </DefaultTable>
     )
 }
