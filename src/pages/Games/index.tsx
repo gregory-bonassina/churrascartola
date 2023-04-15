@@ -110,11 +110,10 @@ export function Games() {
                                         alt=""
                                     />
                                     {getTeamAbreviation(game.clube_casa_id)}
-                                    {game.placar_oficial_mandante}
                                 </TeamContent>
-                                X
+                                {game.placar_oficial_mandante}&nbsp;X&nbsp;
+                                {game.placar_oficial_visitante}
                                 <TeamContent alignContent="right">
-                                    {game.placar_oficial_visitante}
                                     {getTeamAbreviation(
                                         game.clube_visitante_id,
                                     )}
