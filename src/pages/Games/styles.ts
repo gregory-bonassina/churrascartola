@@ -43,14 +43,14 @@ export const TeamsContainer = styled.div`
 `
 
 type TeamContentProps = {
-    align: 'left' | 'right'
+    alignContent: 'left' | 'right'
 }
 
 export const TeamContent = styled.div<TeamContentProps>`
     width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: ${(props) => props.align};
+    justify-content: ${(props) => props.alignContent};
     align-items: center;
 
     gap: 0.5rem;

@@ -96,7 +96,7 @@ export function Games() {
                     <tr key={game.partida_id}>
                         <td width="50%">
                             <TeamsContainer>
-                                <TeamContent align="left">
+                                <TeamContent alignContent="left">
                                     {game.clube_casa_posicao}º
                                     <img
                                         src={getTeamShield(game.clube_casa_id)}
@@ -106,7 +106,7 @@ export function Games() {
                                     {game.placar_oficial_mandante}
                                 </TeamContent>
                                 X
-                                <TeamContent align="right">
+                                <TeamContent alignContent="right">
                                     {game.placar_oficial_visitante}
                                     {getTeamAbreviation(
                                         game.clube_visitante_id,
