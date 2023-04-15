@@ -39,11 +39,11 @@ export const GamesTable = styled.table`
 export const TeamsContainer = styled.div`
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 0.5rem;
 `
 
 export const TeamContent = styled.div`
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: center;
