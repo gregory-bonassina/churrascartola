@@ -18,4 +18,32 @@ export const HeaderContent = styled.div`
     img {
         width: 200px;
     }
+
+    nav {
+        display: flex;
+        gap: 0.8rem;
+
+        a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            text-decoration: none;
+
+            gap: 0.5rem;
+
+            color: ${(props) => props.theme['gray-100']};
+
+            border-top: 3px solid transparent;
+            border-bottom: 3px solid transparent;
+
+            &:not(.active):hover {
+                border-bottom: 3px solid ${(props) => props.theme['red-400']};
+            }
+
+            &.active {
+                color: ${(props) => props.theme['red-400']};
+            }
+        }
+    }
 `
