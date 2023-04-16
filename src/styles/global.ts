@@ -21,4 +21,15 @@ export const GlobalStyle = createGlobalStyle`
     body, input, textarea, button {
         font: 400 1rem Roboto, sans-serif;
     }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: ${(props) => props.theme['red-400']};
+        border: 4px solid transparent;
+        border-radius: 8px;
+        background-clip: padding-box;
+    }
+
+    ::-webkit-scrollbar {
+        width: 1rem;
+    }
 `
