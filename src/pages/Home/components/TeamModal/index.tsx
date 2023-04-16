@@ -66,6 +66,14 @@ export function TeamModal({
             : 0
     })
 
+    teamPlayers.reservas.sort(function (a, b) {
+        return a.posicao_id < b.posicao_id
+            ? -1
+            : a.posicao_id > b.posicao_id
+            ? 1
+            : 0
+    })
+
     const getPlayerPicture = (playerPicture: string) => {
         return playerPicture?.replaceAll('FORMATO', '220x220')
     }
@@ -87,7 +95,7 @@ export function TeamModal({
                 </CloseButton>
 
                 <TableContainer>
-                    <DefaultTable>
+                    <DefaultTable title="TITULARES">
                         <thead>
                             <tr>
                                 <th>JOGADOR</th>
@@ -98,6 +106,55 @@ export function TeamModal({
                         </thead>
                         <tbody>
                             {teamPlayers.atletas.map((player) => (
+                                <tr key={player.atleta_id}>
+                                    <td width="50%">
+                                        <PlayerContainer>
+                                            <img
+                                                src={getPlayerPicture(
+                                                    player.foto,
+                                                )}
+                                                alt=""
+                                            />
+                                            {player.apelido}
+                                        </PlayerContainer>
+                                    </td>
+                                    <td>
+                                        <TeamContainer>
+                                            <img
+                                                src={
+                                                    clubes[player.clube_id]
+                                                        ?.escudos['30x30']
+                                                }
+                                                alt=""
+                                            />
+                                            {
+                                                clubes[player.clube_id]
+                                                    ?.abreviacao
+                                            }
+                                        </TeamContainer>
+                                    </td>
+                                    <td>{posicoes[player.posicao_id]?.nome}</td>
+                                    <td>
+                                        {atletas[player.atleta_id]
+                                            ? atletas[player.atleta_id]
+                                                  .pontuacao
+                                            : '--'}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </DefaultTable>
+                    <DefaultTable title="RESERVAS">
+                        <thead>
+                            <tr>
+                                <th>JOGADOR</th>
+                                <th>TIME</th>
+                                <th>POSIÇÃO</th>
+                                <th>PONTUAÇÃO</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {teamPlayers.reservas.map((player) => (
                                 <tr key={player.atleta_id}>
                                     <td width="50%">
                                         <PlayerContainer>

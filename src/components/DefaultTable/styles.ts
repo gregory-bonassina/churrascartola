@@ -1,6 +1,13 @@
 import styled from 'styled-components'
 
-export const DefaultTableContainer = styled.table`
+export const DefaultTableContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+`
+
+export const DefaultTableContent = styled.table`
     width: 100%;
     border-collapse: separate;
     border-spacing: 0 0.5rem;
@@ -44,4 +51,11 @@ export const DefaultTableContainer = styled.table`
             border-bottom-right-radius: 6px;
         }
     }
+`
+
+export const Title = styled.header`
+    font-weight: bold;
+    padding: 1.25rem 2rem;
+    font-size: 1.125rem;
+    align-self: center;
 `

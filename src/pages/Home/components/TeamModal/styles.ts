@@ -38,6 +38,7 @@ export const CloseButton = styled(Dialog.Close)`
 
 export const TableContainer = styled.div`
     display: flex;
+    flex-direction: column;
     overflow: auto;
 
     padding: 0 0 1rem 0;
