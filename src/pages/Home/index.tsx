@@ -1,7 +1,11 @@
+/* eslint-disable camelcase */
 import { useEffect, useState } from 'react'
 import { apiCartola } from '../../lib/axios'
-import { AvatarContainer, NamesContainer, UserContainer } from './styles'
+import * as Dialog from '@radix-ui/react-dialog'
+
 import { DefaultTable } from '../../components/DefaultTable'
+import { TeamModal } from './components/TeamModal'
+import { UserTeamInfo } from '../../components/UserTeamInfo'
 
 interface RankingProps {
     campeonato: number
@@ -30,53 +34,29 @@ interface TeamProps {
     url_escudo_svg: string
 }
 
-interface LeagueDataProps {
+interface TeamsProps {
     times: TeamProps[]
 }
 
-// interface PlayerScored {
-//     playerId: {
-//         nickname: string
-//         photoUrl: string
-//         score: number
-//         positionId: number
-//         teamId: number
-//         played: boolean
-//     }
-// }
-
-// interface PlayersScoredProps {
-//     atletas: PlayerScored[]
-// }
-
-// interface PlayerProps {
-//     atleta_id: number
-//     clube_id: number
-//     posicao_id: number
-//     status_id: number
-//     nickname: string
-//     name: string
-//     photoUrl: string
-// }
-
-// interface TeamsPlayersProps {
-//     atletas: PlayerProps[]
-//     reservas: PlayerProps[]
-// }
+interface ModalOpenProps {
+    time_id: number
+    nome: string
+    nome_cartola: string
+    url_escudo_svg: string
+}
 
 export function Home() {
-    const [leagueData, setLeagueData] = useState<LeagueDataProps>({
+    const [teams, setTeams] = useState<TeamsProps>({
         times: [],
     })
-    // const [playersScored, setPlayersScored] = useState<PlayersScoredProps>({
-    //     atletas: [],
-    // })
-    // // eslint-disable-next-line no-unused-vars
-    // const [teamsPlayers, setTeamsPlayers] = useState<TeamsPlayersProps[]>([])
+    const [modalOpen, setModalOpen] = useState(false)
+    const [modalProps, setModalProps] = useState<ModalOpenProps>(
+        {} as ModalOpenProps,
+    )
 
     /* Trás os valores da liga */
-    const loadLeagueData = async () => {
-        const response = await apiCartola.get<LeagueDataProps>(
+    const loadTeams = async () => {
+        const response = await apiCartola.get<TeamsProps>(
             `auth/liga/${import.meta.env.VITE_LIGA}`,
             {
                 headers: {
@@ -85,41 +65,14 @@ export function Home() {
             },
         )
 
-        const data = response.data
-
-        setLeagueData(data)
-
-        // data.times.forEach((team) => {
-        //     fetchTeam(team.time_id)
-        // })
+        setTeams(response.data)
     }
 
-    /* Trás as escalações dos times na rodada */
-    // const fetchTeam = async (teamId: number) => {
-    // const response = await apiCartola.get<TeamsPlayersProps>(
-    //     `time/id/${teamId}`,
-    // )
-    // setTeamsPlayers((prevState) => [...prevState, response.data])
-    // }
-
-    /* Trás os jogadores que jogaram/pontuaram na rodada */
-    // const loadPlayersScored = async () => {
-    //     const response = await apiCartola.get<PlayersScoredProps>(
-    //         'atletas/pontuados',
-    //     )
-
-    //     setPlayersScored(response.data)
-    // }
-
     useEffect(() => {
-        loadLeagueData()
-        // loadPlayersScored()
+        loadTeams()
     }, [])
 
-    const { times } = leagueData
-
-    // eslint-disable-next-line no-unused-vars
-    // const { atletas } = playersScored
+    const { times } = teams
 
     const orderedTeams = times.sort(function (a, b) {
         return a.ranking.campeonato < b.ranking.campeonato
@@ -131,6 +84,21 @@ export function Home() {
 
     const appendData = (data: number | string) => {
         return data || '--'
+    }
+
+    const handleOpenModal = ({
+        nome,
+        nome_cartola,
+        time_id,
+        url_escudo_svg,
+    }: ModalOpenProps) => {
+        setModalOpen(true)
+        setModalProps({
+            nome,
+            nome_cartola,
+            time_id,
+            url_escudo_svg,
+        })
     }
 
     return (
@@ -145,25 +113,46 @@ export function Home() {
                 </tr>
             </thead>
             <tbody>
-                {orderedTeams.map((team) => (
-                    <tr key={team.time_id}>
-                        <td width="50%">
-                            <UserContainer>
-                                <AvatarContainer>
-                                    <img src={team.url_escudo_svg} alt="" />
-                                </AvatarContainer>
-                                <NamesContainer>
-                                    <strong>{team.nome}</strong>
-                                    <span>{team.nome_cartola}</span>
-                                </NamesContainer>
-                            </UserContainer>
-                        </td>
-                        <td>0/12</td>
-                        <td>{appendData(team.pontos.rodada?.toFixed(2))}</td>
-                        <td>{appendData(team.pontos.campeonato)}</td>
-                        <td>{`${appendData(team.ranking.campeonato)} º`}</td>
-                    </tr>
-                ))}
+                <Dialog.Root open={modalOpen} onOpenChange={setModalOpen}>
+                    {orderedTeams.map((team) => (
+                        <tr
+                            onClick={() =>
+                                handleOpenModal({
+                                    nome: team.nome,
+                                    nome_cartola: team.nome_cartola,
+                                    time_id: team.time_id,
+                                    url_escudo_svg: team.url_escudo_svg,
+                                })
+                            }
+                            key={team.time_id}
+                            style={{ cursor: 'pointer' }}
+                        >
+                            <td width="50%">
+                                <UserTeamInfo
+                                    nome={team.nome}
+                                    nome_cartola={team.nome_cartola}
+                                    url_escudo_svg={team.url_escudo_svg}
+                                />
+                            </td>
+                            <td>0/12</td>
+                            <td>
+                                {appendData(team.pontos.rodada?.toFixed(2))}
+                            </td>
+                            <td>{appendData(team.pontos.campeonato)}</td>
+                            <td>{`${appendData(
+                                team.ranking.campeonato,
+                            )} º`}</td>
+                        </tr>
+                    ))}
+                    {modalOpen && (
+                        <TeamModal
+                            time_id={modalProps.time_id}
+                            nome={modalProps.nome}
+                            nome_cartola={modalProps.nome_cartola}
+                            url_escudo_svg={modalProps.url_escudo_svg}
+                        />
+                    )}
+                </Dialog.Root>
             </tbody>
         </DefaultTable>
     )

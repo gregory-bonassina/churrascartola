@@ -4,10 +4,19 @@ export const DefaultTableContainer = styled.table`
     width: 100%;
     border-collapse: separate;
     border-spacing: 0 0.5rem;
-    margin-top: 1.5rem;
+
+    thead {
+        position: sticky;
+        top: 0;
+
+        background: ${(props) => props.theme['gray-800']};
+    }
 
     th {
         text-align: center;
+
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
 
         &:first-child {
             padding: 0 2rem;

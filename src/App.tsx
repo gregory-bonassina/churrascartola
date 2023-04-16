@@ -4,13 +4,16 @@ import { BrowserRouter } from 'react-router-dom'
 import { GlobalStyle } from './styles/global'
 import { defaultTheme } from './styles/themes/default'
 import { Router } from './Router'
+import { AllScoredPlayersProvider } from './contexts/AllScoredPlayersContext'
 
 function App() {
     return (
         <ThemeProvider theme={defaultTheme}>
             <BrowserRouter>
                 <MarketStateProvider>
-                    <Router />
+                    <AllScoredPlayersProvider>
+                        <Router />
+                    </AllScoredPlayersProvider>
                 </MarketStateProvider>
             </BrowserRouter>
             <GlobalStyle />
