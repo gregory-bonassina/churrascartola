@@ -58,21 +58,18 @@ export function TeamModal({
         loadTeamPlayers()
     }, [time_id])
 
-    teamPlayers.atletas.sort(function (a, b) {
-        return a.posicao_id < b.posicao_id
-            ? -1
-            : a.posicao_id > b.posicao_id
-            ? 1
-            : 0
-    })
+    const sortPlayers = (players: PlayerProps[]) => {
+        players?.sort(function (a, b) {
+            return a.posicao_id < b.posicao_id
+                ? -1
+                : a.posicao_id > b.posicao_id
+                ? 1
+                : 0
+        })
+    }
 
-    teamPlayers.reservas.sort(function (a, b) {
-        return a.posicao_id < b.posicao_id
-            ? -1
-            : a.posicao_id > b.posicao_id
-            ? 1
-            : 0
-    })
+    sortPlayers(teamPlayers.atletas)
+    sortPlayers(teamPlayers.reservas)
 
     const getPlayerPicture = (playerPicture: string) => {
         return playerPicture?.replaceAll('FORMATO', '220x220')
