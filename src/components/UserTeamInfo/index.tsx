@@ -7,11 +7,7 @@ interface UserTeamInfoProps {
     url_escudo_svg: string
 }
 
-export function UserTeamInfo({
-    nome,
-    nome_cartola,
-    url_escudo_svg,
-}: UserTeamInfoProps) {
+export function UserTeamInfo({ nome, nome_cartola, url_escudo_svg }: UserTeamInfoProps) {
     return (
         <UserContainer>
             <AvatarContainer>

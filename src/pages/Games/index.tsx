@@ -61,11 +61,7 @@ export function Games() {
     const { clubes, partidas } = gamesData
 
     partidas.sort(function (a, b) {
-        return a.timestamp < b.timestamp
-            ? -1
-            : a.timestamp > b.timestamp
-            ? 1
-            : 0
+        return a.timestamp < b.timestamp ? -1 : a.timestamp > b.timestamp ? 1 : 0
     })
 
     const getTeam = (teamId: number) => {
@@ -98,44 +94,26 @@ export function Games() {
                     <tr key={game.partida_id}>
                         <td width="50%">
                             <TeamsContainer>
-                                {!game.valida && (
-                                    <ValidGame>
-                                        * rodada não é válida para o Cartola
-                                    </ValidGame>
-                                )}
+                                {!game.valida && <ValidGame>* rodada não é válida para o Cartola</ValidGame>}
                                 <TeamContent alignContent="left">
                                     {game.clube_casa_posicao}º
-                                    <img
-                                        src={getTeamShield(game.clube_casa_id)}
-                                        alt=""
-                                    />
+                                    <img src={getTeamShield(game.clube_casa_id)} alt="" />
                                     {getTeamAbreviation(game.clube_casa_id)}
                                 </TeamContent>
                                 {game.placar_oficial_mandante}&nbsp;X&nbsp;
                                 {game.placar_oficial_visitante}
                                 <TeamContent alignContent="right">
-                                    {getTeamAbreviation(
-                                        game.clube_visitante_id,
-                                    )}
-                                    <img
-                                        src={getTeamShield(
-                                            game.clube_visitante_id,
-                                        )}
-                                        alt=""
-                                    />
+                                    {getTeamAbreviation(game.clube_visitante_id)}
+                                    <img src={getTeamShield(game.clube_visitante_id)} alt="" />
                                     {game.clube_visitante_posicao}º
                                 </TeamContent>
                             </TeamsContainer>
                         </td>
                         <td>{game.local}</td>
                         <td>
-                            {format(
-                                new Date(game.timestamp * 1000),
-                                'EEEE - dd/MM/yy - H:mm',
-                                {
-                                    locale: ptBR,
-                                },
-                            )}
+                            {format(new Date(game.timestamp * 1000), 'EEEE - dd/MM/yy - H:mm', {
+                                locale: ptBR,
+                            })}
                         </td>
                     </tr>
                 ))}

@@ -1,13 +1,6 @@
 /* eslint-disable camelcase */
 import * as Dialog from '@radix-ui/react-dialog'
-import {
-    CloseButton,
-    Content,
-    Overlay,
-    PlayerContainer,
-    TableContainer,
-    TeamContainer,
-} from './styles'
+import { CloseButton, Content, Overlay, PlayerContainer, TableContainer, TeamContainer } from './styles'
 import { X } from 'phosphor-react'
 import { UserTeamInfo } from '../../../../components/UserTeamInfo'
 import { DefaultTable } from '../../../../components/DefaultTable'
@@ -36,12 +29,7 @@ interface TeamModalProps {
     url_escudo_svg: string
 }
 
-export function TeamModal({
-    nome,
-    nome_cartola,
-    time_id,
-    url_escudo_svg,
-}: TeamModalProps) {
+export function TeamModal({ nome, nome_cartola, time_id, url_escudo_svg }: TeamModalProps) {
     const [teamPlayers, setTeamPlayers] = useState<TeamProps>({
         atletas: [],
         reservas: [],
@@ -60,11 +48,7 @@ export function TeamModal({
 
     const sortPlayers = (players: PlayerProps[]) => {
         players?.sort(function (a, b) {
-            return a.posicao_id < b.posicao_id
-                ? -1
-                : a.posicao_id > b.posicao_id
-                ? 1
-                : 0
+            return a.posicao_id < b.posicao_id ? -1 : a.posicao_id > b.posicao_id ? 1 : 0
         })
     }
 
@@ -80,11 +64,7 @@ export function TeamModal({
             <Overlay />
             <Content>
                 <Dialog.Title>
-                    <UserTeamInfo
-                        nome={nome}
-                        nome_cartola={nome_cartola}
-                        url_escudo_svg={url_escudo_svg}
-                    />
+                    <UserTeamInfo nome={nome} nome_cartola={nome_cartola} url_escudo_svg={url_escudo_svg} />
                 </Dialog.Title>
 
                 <CloseButton>
@@ -106,37 +86,18 @@ export function TeamModal({
                                 <tr key={player.atleta_id}>
                                     <td width="50%">
                                         <PlayerContainer>
-                                            <img
-                                                src={getPlayerPicture(
-                                                    player.foto,
-                                                )}
-                                                alt=""
-                                            />
+                                            <img src={getPlayerPicture(player.foto)} alt="" />
                                             {player.apelido}
                                         </PlayerContainer>
                                     </td>
                                     <td>
                                         <TeamContainer>
-                                            <img
-                                                src={
-                                                    clubes[player.clube_id]
-                                                        ?.escudos['30x30']
-                                                }
-                                                alt=""
-                                            />
-                                            {
-                                                clubes[player.clube_id]
-                                                    ?.abreviacao
-                                            }
+                                            <img src={clubes[player.clube_id]?.escudos['30x30']} alt="" />
+                                            {clubes[player.clube_id]?.abreviacao}
                                         </TeamContainer>
                                     </td>
                                     <td>{posicoes[player.posicao_id]?.nome}</td>
-                                    <td>
-                                        {atletas[player.atleta_id]
-                                            ? atletas[player.atleta_id]
-                                                  .pontuacao
-                                            : '--'}
-                                    </td>
+                                    <td>{atletas[player.atleta_id] ? atletas[player.atleta_id].pontuacao : '--'}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -155,37 +116,18 @@ export function TeamModal({
                                 <tr key={player.atleta_id}>
                                     <td width="50%">
                                         <PlayerContainer>
-                                            <img
-                                                src={getPlayerPicture(
-                                                    player.foto,
-                                                )}
-                                                alt=""
-                                            />
+                                            <img src={getPlayerPicture(player.foto)} alt="" />
                                             {player.apelido}
                                         </PlayerContainer>
                                     </td>
                                     <td>
                                         <TeamContainer>
-                                            <img
-                                                src={
-                                                    clubes[player.clube_id]
-                                                        ?.escudos['30x30']
-                                                }
-                                                alt=""
-                                            />
-                                            {
-                                                clubes[player.clube_id]
-                                                    ?.abreviacao
-                                            }
+                                            <img src={clubes[player.clube_id]?.escudos['30x30']} alt="" />
+                                            {clubes[player.clube_id]?.abreviacao}
                                         </TeamContainer>
                                     </td>
                                     <td>{posicoes[player.posicao_id]?.nome}</td>
-                                    <td>
-                                        {atletas[player.atleta_id]
-                                            ? atletas[player.atleta_id]
-                                                  .pontuacao
-                                            : '--'}
-                                    </td>
+                                    <td>{atletas[player.atleta_id] ? atletas[player.atleta_id].pontuacao : '--'}</td>
                                 </tr>
                             ))}
                         </tbody>

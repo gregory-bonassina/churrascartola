@@ -39,19 +39,14 @@ interface AllScoredPlayersProviderProps {
     children: ReactNode
 }
 
-export const AllScoredPlayersContext = createContext(
-    {} as AllScoredPlayersProps,
-)
+export const AllScoredPlayersContext = createContext({} as AllScoredPlayersProps)
 
-export function AllScoredPlayersProvider({
-    children,
-}: AllScoredPlayersProviderProps) {
-    const [allScoredPlayers, setAllScoredPlayers] =
-        useState<AllScoredPlayersProps>({
-            atletas: [],
-            posicoes: [],
-            clubes: [],
-        })
+export function AllScoredPlayersProvider({ children }: AllScoredPlayersProviderProps) {
+    const [allScoredPlayers, setAllScoredPlayers] = useState<AllScoredPlayersProps>({
+        atletas: [],
+        posicoes: [],
+        clubes: [],
+    })
 
     const loadAllScoredPlayers = async () => {
         const response = await apiCartola.get('atletas/pontuados')
@@ -63,9 +58,5 @@ export function AllScoredPlayersProvider({
         loadAllScoredPlayers()
     }, [])
 
-    return (
-        <AllScoredPlayersContext.Provider value={allScoredPlayers}>
-            {children}
-        </AllScoredPlayersContext.Provider>
-    )
+    return <AllScoredPlayersContext.Provider value={allScoredPlayers}>{children}</AllScoredPlayersContext.Provider>
 }

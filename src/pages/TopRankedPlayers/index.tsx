@@ -23,9 +23,7 @@ interface TopRankedPlayersProps {
 }
 
 export default function TopRankedPlayers() {
-    const [topRankedPlayers, setTopRankedPlayers] = useState<
-        TopRankedPlayersProps[]
-    >([])
+    const [topRankedPlayers, setTopRankedPlayers] = useState<TopRankedPlayersProps[]>([])
 
     const loadTopRankedPlayers = async () => {
         const response = await apiCartola.get('mercado/destaques')
@@ -62,30 +60,18 @@ export default function TopRankedPlayers() {
                         <td>{index + 1}º</td>
                         <td>
                             <TeamContainer>
-                                <img
-                                    src={topRankedPlayer.escudo_clube}
-                                    alt=""
-                                />
+                                <img src={topRankedPlayer.escudo_clube} alt="" />
                                 {topRankedPlayer.clube}
                             </TeamContainer>
                         </td>
                         <td>{topRankedPlayer.posicao}</td>
                         <td width="50%">
                             <PlayerContainer>
-                                <img
-                                    src={getPlayerPicture(
-                                        topRankedPlayer.Atleta.foto,
-                                    )}
-                                    alt=""
-                                />
+                                <img src={getPlayerPicture(topRankedPlayer.Atleta.foto)} alt="" />
                                 {topRankedPlayer.Atleta.apelido}
                             </PlayerContainer>
                         </td>
-                        <td>
-                            {formatNumber(
-                                topRankedPlayer.Atleta.preco_editorial,
-                            )}
-                        </td>
+                        <td>{formatNumber(topRankedPlayer.Atleta.preco_editorial)}</td>
                         <td>{formatNumber(topRankedPlayer.escalacoes)}</td>
                     </tr>
                 ))}

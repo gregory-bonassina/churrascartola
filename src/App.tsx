@@ -6,7 +6,7 @@ import { defaultTheme } from './styles/themes/default'
 import { Router } from './Router'
 import { AllScoredPlayersProvider } from './contexts/AllScoredPlayersContext'
 
-function App() {
+export function App() {
     return (
         <ThemeProvider theme={defaultTheme}>
             <BrowserRouter>
@@ -20,5 +20,3 @@ function App() {
         </ThemeProvider>
     )
 }
-
-export default App

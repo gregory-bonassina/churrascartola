@@ -6,9 +6,7 @@ interface MarketStateCountdownProps {
     closeMarketTimestamp: number
 }
 
-export function MarketStateCountdown({
-    closeMarketTimestamp,
-}: MarketStateCountdownProps) {
+export function MarketStateCountdown({ closeMarketTimestamp }: MarketStateCountdownProps) {
     const [amountSecondsPassed, setAmountSecondsPassed] = useState(0)
 
     const closeMaketDateTime = closeMarketTimestamp * 1000
@@ -20,23 +18,16 @@ export function MarketStateCountdown({
 
     const zeroPad = (num: number | undefined) => String(num).padStart(2, '0')
 
-    const formattedDate = [duration.hours, duration.minutes, duration.seconds]
-        .map(zeroPad)
-        .join(':')
+    const formattedDate = [duration.hours, duration.minutes, duration.seconds].map(zeroPad).join(':')
 
-    const formattedDateWithDays = `${
-        duration.days ? duration.days : 0
-    }D ${formattedDate}`
+    const formattedDateWithDays = `${duration.days ? duration.days : 0}D ${formattedDate}`
 
     useEffect(() => {
         const interval = setInterval(() => {
             const dateNow = new Date()
             const dateMarketClose = new Date(closeMaketDateTime)
 
-            const secondsDifference = differenceInSeconds(
-                dateNow,
-                dateMarketClose,
-            )
+            const secondsDifference = differenceInSeconds(dateNow, dateMarketClose)
 
             if (dateNow.getTime() <= dateMarketClose.getTime()) {
                 setAmountSecondsPassed(secondsDifference)

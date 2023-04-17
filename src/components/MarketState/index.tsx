@@ -1,25 +1,31 @@
 /* eslint-disable camelcase */
 import { useContext } from 'react'
-import { MarketStateCountdown } from '../MarketStateCountdown'
-
-import { MarketStateContainer, MarketStateContent } from './styles'
 import { MarketStateContext } from '../../contexts/MarketStateContext'
 
+import { MarketStateCountdown } from '../MarketStateCountdown'
+import { zeroPadStart } from '../../util/padUtil'
+import { MarketStateContainer, MarketStateContent } from './styles'
+
+const MarketStateTypes = {
+    Open: 'aberto',
+    Close: 'fechado',
+}
+
+const MarketStateCloseTypes = {
+    Close: 'Fecha',
+    Closed: 'Fechou',
+}
+
 export function MarketState() {
-    const { fechamento, rodada_atual, status_mercado } =
-        useContext(MarketStateContext)
+    const { fechamento, rodada_atual, status_mercado } = useContext(MarketStateContext)
 
-    const marketState = status_mercado === 1 ? 'aberto' : 'fechado'
+    const marketState = status_mercado === 1 ? MarketStateTypes.Open : MarketStateTypes.Close
 
-    const zeroPad = (num: number | undefined) => String(num).padStart(2, '0')
+    const closeLabel =
+        marketState === MarketStateTypes.Open ? MarketStateCloseTypes.Close : MarketStateCloseTypes.Closed
 
-    const closeLabel = marketState === 'aberto' ? 'Fecha' : 'Fechou'
-    const marketCloseDate = `${zeroPad(fechamento.dia)}/${zeroPad(
-        fechamento.mes,
-    )}/${fechamento.ano}`
-    const marketCloseTime = `${fechamento.hora}:${zeroPad(
-        fechamento.minuto,
-    )}:00`
+    const marketCloseDate = `${zeroPadStart(fechamento.dia)}/${zeroPadStart(fechamento.mes)}/${fechamento.ano}`
+    const marketCloseTime = `${fechamento.hora}:${zeroPadStart(fechamento.minuto)}:00`
 
     return (
         <MarketStateContainer>
@@ -30,10 +36,8 @@ export function MarketState() {
                 <span>
                     {closeLabel} em {marketCloseDate} às {marketCloseTime}
                 </span>
-                {marketState === 'aberto' && (
-                    <MarketStateCountdown
-                        closeMarketTimestamp={fechamento.timestamp}
-                    />
+                {marketState === MarketStateTypes.Open && (
+                    <MarketStateCountdown closeMarketTimestamp={fechamento.timestamp} />
                 )}
             </MarketStateContent>
         </MarketStateContainer>

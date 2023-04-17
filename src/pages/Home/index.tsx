@@ -50,20 +50,15 @@ export function Home() {
         times: [],
     })
     const [modalOpen, setModalOpen] = useState(false)
-    const [modalProps, setModalProps] = useState<ModalOpenProps>(
-        {} as ModalOpenProps,
-    )
+    const [modalProps, setModalProps] = useState<ModalOpenProps>({} as ModalOpenProps)
 
     /* Trás os valores da liga */
     const loadTeams = async () => {
-        const response = await apiCartola.get<TeamsProps>(
-            `auth/liga/${import.meta.env.VITE_LIGA}`,
-            {
-                headers: {
-                    'X-GLB-Token': import.meta.env.VITE_GLBID,
-                },
+        const response = await apiCartola.get<TeamsProps>(`auth/liga/${import.meta.env.VITE_LIGA}`, {
+            headers: {
+                'X-GLB-Token': import.meta.env.VITE_GLBID,
             },
-        )
+        })
 
         setTeams(response.data)
     }
@@ -75,23 +70,14 @@ export function Home() {
     const { times } = teams
 
     const orderedTeams = times.sort(function (a, b) {
-        return a.ranking.campeonato < b.ranking.campeonato
-            ? -1
-            : a.ranking.campeonato > b.ranking.campeonato
-            ? 1
-            : 0
+        return a.ranking.campeonato < b.ranking.campeonato ? -1 : a.ranking.campeonato > b.ranking.campeonato ? 1 : 0
     })
 
     const appendData = (data: number | string) => {
         return data || '--'
     }
 
-    const handleOpenModal = ({
-        nome,
-        nome_cartola,
-        time_id,
-        url_escudo_svg,
-    }: ModalOpenProps) => {
+    const handleOpenModal = ({ nome, nome_cartola, time_id, url_escudo_svg }: ModalOpenProps) => {
         setModalOpen(true)
         setModalProps({
             nome,
@@ -135,13 +121,9 @@ export function Home() {
                                 />
                             </td>
                             <td>0/12</td>
-                            <td>
-                                {appendData(team.pontos.rodada?.toFixed(2))}
-                            </td>
+                            <td>{appendData(team.pontos.rodada?.toFixed(2))}</td>
                             <td>{appendData(team.pontos.campeonato)}</td>
-                            <td>{`${appendData(
-                                team.ranking.campeonato,
-                            )} º`}</td>
+                            <td>{`${appendData(team.ranking.campeonato)} º`}</td>
                         </tr>
                     ))}
                     {modalOpen && (

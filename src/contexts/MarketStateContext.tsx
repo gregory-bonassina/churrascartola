@@ -1,10 +1,4 @@
-import {
-    ReactNode,
-    createContext,
-    useCallback,
-    useEffect,
-    useState,
-} from 'react'
+import { ReactNode, createContext, useCallback, useEffect, useState } from 'react'
 import { apiCartola } from '../lib/axios'
 
 interface MarketCloseProps {
@@ -51,9 +45,5 @@ export function MarketStateProvider({ children }: MarketStateProviderProps) {
         loadMarket()
     }, [loadMarket])
 
-    return (
-        <MarketStateContext.Provider value={market}>
-            {children}
-        </MarketStateContext.Provider>
-    )
+    return <MarketStateContext.Provider value={market}>{children}</MarketStateContext.Provider>
 }
