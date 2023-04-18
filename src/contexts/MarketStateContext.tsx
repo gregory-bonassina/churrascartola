@@ -20,6 +20,13 @@ interface MarketStateProviderProps {
     children: ReactNode
 }
 
+export const MarketStatesNames = ['fechado', 'aberto']
+
+export const MarketStates = {
+    CLOSED: 0,
+    OPEN: 1,
+}
+
 export const MarketStateContext = createContext({} as MarketStateProps)
 
 export function MarketStateProvider({ children }: MarketStateProviderProps) {

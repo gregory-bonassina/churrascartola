@@ -1,28 +1,22 @@
 /* eslint-disable camelcase */
 import { useContext } from 'react'
-import { MarketStateContext } from '../../contexts/MarketStateContext'
+import { MarketStateContext, MarketStates, MarketStatesNames } from '../../contexts/MarketStateContext'
 
 import { MarketStateCountdown } from '../MarketStateCountdown'
 import { zeroPadStart } from '../../util/padUtil'
 import { MarketStateContainer, MarketStateContent } from './styles'
 
-const MarketStateTypes = {
-    Open: 'aberto',
-    Close: 'fechado',
-}
-
 const MarketStateCloseTypes = {
-    Close: 'Fecha',
-    Closed: 'Fechou',
+    CLOSE: 'Fecha',
+    CLOSED: 'Fechou',
 }
 
 export function MarketState() {
     const { fechamento, rodada_atual, status_mercado } = useContext(MarketStateContext)
 
-    const marketState = status_mercado === 1 ? MarketStateTypes.Open : MarketStateTypes.Close
+    const marketState = MarketStatesNames[status_mercado]
 
-    const closeLabel =
-        marketState === MarketStateTypes.Open ? MarketStateCloseTypes.Close : MarketStateCloseTypes.Closed
+    const closeLabel = status_mercado === MarketStates.OPEN ? MarketStateCloseTypes.CLOSE : MarketStateCloseTypes.CLOSED
 
     const marketCloseDate = `${zeroPadStart(fechamento.dia)}/${zeroPadStart(fechamento.mes)}/${fechamento.ano}`
     const marketCloseTime = `${fechamento.hora}:${zeroPadStart(fechamento.minuto)}:00`
@@ -36,7 +30,7 @@ export function MarketState() {
                 <span>
                     {closeLabel} em {marketCloseDate} às {marketCloseTime}
                 </span>
-                {marketState === MarketStateTypes.Open && (
+                {status_mercado === MarketStates.OPEN && (
                     <MarketStateCountdown closeMarketTimestamp={fechamento.timestamp} />
                 )}
             </MarketStateContent>
