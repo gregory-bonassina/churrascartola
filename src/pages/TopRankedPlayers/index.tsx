@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { apiCartola } from '../../lib/axios'
 import { DefaultTable } from '../../components/DefaultTable'
 import { PlayerContainer, TeamContainer } from './styles'
+import { PlayersContext } from '../../contexts/PlayersContext'
 
 interface PlayerProps {
     nome: string
@@ -23,6 +24,7 @@ interface TopRankedPlayersProps {
 }
 
 export default function TopRankedPlayers() {
+    const { allPlayers } = useContext(PlayersContext)
     const [topRankedPlayers, setTopRankedPlayers] = useState<TopRankedPlayersProps[]>([])
 
     const loadTopRankedPlayers = async () => {
@@ -40,6 +42,16 @@ export default function TopRankedPlayers() {
 
     const formatNumber = (number: number) => {
         return new Intl.NumberFormat('pt-BR').format(number)
+    }
+
+    const getPlayerPrice = (playerId: number) => {
+        const player = allPlayers.atletas.find((player) => player.atleta_id === playerId)
+
+        if (player) {
+            return formatNumber(player.preco_num)
+        }
+
+        return '--'
     }
 
     return (
@@ -71,7 +83,7 @@ export default function TopRankedPlayers() {
                                 {topRankedPlayer.Atleta.apelido}
                             </PlayerContainer>
                         </td>
-                        <td>{formatNumber(topRankedPlayer.Atleta.preco_editorial)}</td>
+                        <td>{getPlayerPrice(topRankedPlayer.Atleta.atleta_id)}</td>
                         <td>{formatNumber(topRankedPlayer.escalacoes)}</td>
                     </tr>
                 ))}

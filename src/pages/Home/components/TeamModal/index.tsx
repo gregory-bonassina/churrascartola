@@ -5,7 +5,7 @@ import { X } from 'phosphor-react'
 import { UserTeamInfo } from '../../../../components/UserTeamInfo'
 import { DefaultTable } from '../../../../components/DefaultTable'
 import { useContext, useEffect, useState } from 'react'
-import { AllScoredPlayersContext } from '../../../../contexts/AllScoredPlayersContext'
+import { PlayersContext } from '../../../../contexts/PlayersContext'
 import { apiCartola } from '../../../../lib/axios'
 
 interface PlayerProps {
@@ -34,7 +34,7 @@ export function TeamModal({ nome, nome_cartola, time_id, url_escudo_svg }: TeamM
         atletas: [],
         reservas: [],
     })
-    const { atletas, posicoes, clubes } = useContext(AllScoredPlayersContext)
+    const { atletas, posicoes, clubes } = useContext(PlayersContext)
 
     useEffect(() => {
         const loadTeamPlayers = async () => {

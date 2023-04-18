@@ -2,6 +2,16 @@ import { ReactNode, createContext, useEffect, useState } from 'react'
 import { apiCartola } from '../lib/axios'
 
 interface PlayerProps {
+    atleta_id: number
+    preco_num: number
+    variacao_num: number
+}
+
+interface AllPlayersProps {
+    atletas: PlayerProps[]
+}
+
+interface PlayerScoredProps {
     apelido: string
     foto: string
     pontuacao: number
@@ -30,22 +40,31 @@ interface TeamsProps {
 }
 
 interface AllScoredPlayersProps {
-    atletas: PlayerProps[]
+    atletas: PlayerScoredProps[]
     posicoes: PostitionsProps[]
     clubes: TeamsProps[]
+}
+
+interface PlayersContextProps {
+    allScoredPlayers: AllScoredPlayersProps
+    allPlayers: AllPlayersProps
 }
 
 interface AllScoredPlayersProviderProps {
     children: ReactNode
 }
 
-export const AllScoredPlayersContext = createContext({} as AllScoredPlayersProps)
+export const PlayersContext = createContext({} as PlayersContextProps)
 
-export function AllScoredPlayersProvider({ children }: AllScoredPlayersProviderProps) {
+export function PlayersProvider({ children }: AllScoredPlayersProviderProps) {
     const [allScoredPlayers, setAllScoredPlayers] = useState<AllScoredPlayersProps>({
         atletas: [],
         posicoes: [],
         clubes: [],
+    })
+
+    const [allPlayers, setAllPlayers] = useState<AllPlayersProps>({
+        atletas: [],
     })
 
     const loadAllScoredPlayers = async () => {
@@ -54,9 +73,16 @@ export function AllScoredPlayersProvider({ children }: AllScoredPlayersProviderP
         setAllScoredPlayers(response.data)
     }
 
+    const loadAllPlayers = async () => {
+        const response = await apiCartola.get('atletas/mercado')
+
+        setAllPlayers(response.data)
+    }
+
     useEffect(() => {
         loadAllScoredPlayers()
+        loadAllPlayers()
     }, [])
 
-    return <AllScoredPlayersContext.Provider value={allScoredPlayers}>{children}</AllScoredPlayersContext.Provider>
+    return <PlayersContext.Provider value={{ allScoredPlayers, allPlayers }}>{children}</PlayersContext.Provider>
 }
