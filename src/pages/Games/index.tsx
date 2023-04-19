@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
-import { useCallback, useContext, useEffect, useState } from 'react'
-import { TeamContent, TeamsContainer, ValidGame } from './styles'
+import { useContext, useEffect, useState } from 'react'
+import { TeamContent, TeamPreviousGameStatus, TeamsContainer, ValidGame } from './styles'
 import { MarketStateContext } from '../../contexts/MarketStateContext'
 import { apiCartola } from '../../lib/axios'
 import { format } from 'date-fns'
@@ -45,18 +45,33 @@ export function Games() {
         clubes: [],
         partidas: [],
     })
-
-    const loadGamesData = useCallback(async () => {
-        if (rodada_atual) {
-            const response = await apiCartola.get(`partidas/${rodada_atual}`)
-
-            setGamesData(response.data)
-        }
-    }, [rodada_atual])
+    const [previousGamesData, setPreviousGamesData] = useState<GameDataProps>({
+        clubes: [],
+        partidas: [],
+    })
 
     useEffect(() => {
+        const loadGamesData = async () => {
+            if (rodada_atual) {
+                const response = await apiCartola.get(`partidas/${rodada_atual}`)
+
+                setGamesData(response.data)
+            }
+        }
+
+        const loadPreviousGamesData = async () => {
+            const previous = rodada_atual - 1 !== -1
+
+            if (rodada_atual && previous) {
+                const response = await apiCartola.get(`partidas/${rodada_atual - 1}`)
+
+                setPreviousGamesData(response.data)
+            }
+        }
+
         loadGamesData()
-    }, [loadGamesData])
+        loadPreviousGamesData()
+    }, [rodada_atual])
 
     const { clubes, partidas } = gamesData
 
@@ -80,6 +95,36 @@ export function Games() {
         return team?.nome
     }
 
+    const getPreviousTeamGameResult = (teamId: number) => {
+        if (!previousGamesData) {
+            return 'draw'
+        }
+
+        const previousTeamGame = previousGamesData.partidas.find(
+            (game) => game.clube_visitante_id === teamId || game.clube_casa_id === teamId,
+        )
+
+        if (previousTeamGame) {
+            if (previousTeamGame.placar_oficial_mandante === previousTeamGame.placar_oficial_visitante) {
+                return 'draw'
+            } else if (
+                previousTeamGame.placar_oficial_mandante > previousTeamGame.placar_oficial_visitante &&
+                previousTeamGame.clube_casa_id === teamId
+            ) {
+                return 'victory'
+            } else if (
+                previousTeamGame.placar_oficial_visitante > previousTeamGame.placar_oficial_mandante &&
+                previousTeamGame.clube_visitante_id === teamId
+            ) {
+                return 'victory'
+            } else {
+                return 'lose'
+            }
+        }
+
+        return 'draw'
+    }
+
     return (
         <DefaultTable>
             <thead>
@@ -96,6 +141,7 @@ export function Games() {
                             <TeamsContainer>
                                 {!game.valida && <ValidGame>* rodada não é válida para o Cartola</ValidGame>}
                                 <TeamContent alignContent="left">
+                                    <TeamPreviousGameStatus status={getPreviousTeamGameResult(game.clube_casa_id)} />
                                     {game.clube_casa_posicao}º
                                     <img src={getTeamShield(game.clube_casa_id)} alt="" />
                                     {getTeamAbreviation(game.clube_casa_id)}
@@ -106,6 +152,9 @@ export function Games() {
                                     {getTeamAbreviation(game.clube_visitante_id)}
                                     <img src={getTeamShield(game.clube_visitante_id)} alt="" />
                                     {game.clube_visitante_posicao}º
+                                    <TeamPreviousGameStatus
+                                        status={getPreviousTeamGameResult(game.clube_visitante_id)}
+                                    />
                                 </TeamContent>
                             </TeamsContainer>
                         </td>

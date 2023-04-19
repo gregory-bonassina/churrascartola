@@ -28,3 +28,19 @@ export const TeamContent = styled.div<TeamContentProps>`
 
     gap: 0.5rem;
 `
+
+export interface TeamPreviousGameStatusProps {
+    status: 'victory' | 'lose' | 'draw'
+}
+
+export const TeamPreviousGameStatus = styled.div<TeamPreviousGameStatusProps>`
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: ${(props) =>
+        props.status === 'victory'
+            ? props.theme['green-500']
+            : props.status === 'lose'
+            ? props.theme['red-500']
+            : props.theme['gray-500']};
+`
