@@ -28,9 +28,14 @@ export const TeamContent = styled.div<TeamContentProps>`
 
     gap: 0.5rem;
 `
+export const TeamPreviousGameStauts = {
+    victory: 'victory',
+    lose: 'lose',
+    draw: 'draw',
+} as const
 
-export interface TeamPreviousGameStatusProps {
-    status: 'victory' | 'lose' | 'draw'
+interface TeamPreviousGameStatusProps {
+    status: keyof typeof TeamPreviousGameStauts
 }
 
 export const TeamPreviousGameStatus = styled.div<TeamPreviousGameStatusProps>`
@@ -38,9 +43,9 @@ export const TeamPreviousGameStatus = styled.div<TeamPreviousGameStatusProps>`
     height: 12px;
     border-radius: 50%;
     background-color: ${(props) =>
-        props.status === 'victory'
+        props.status === TeamPreviousGameStauts.victory
             ? props.theme['green-500']
-            : props.status === 'lose'
+            : props.status === TeamPreviousGameStauts.lose
             ? props.theme['red-500']
             : props.theme['gray-500']};
 `

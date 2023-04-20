@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { useContext, useEffect, useState } from 'react'
-import { TeamContent, TeamPreviousGameStatus, TeamsContainer, ValidGame } from './styles'
+import { TeamContent, TeamPreviousGameStatus, TeamPreviousGameStauts, TeamsContainer, ValidGame } from './styles'
 import { MarketStateContext } from '../../contexts/MarketStateContext'
 import { apiCartola } from '../../lib/axios'
 import { format } from 'date-fns'
@@ -97,7 +97,7 @@ export function Games() {
 
     const getPreviousTeamGameResult = (teamId: number) => {
         if (!previousGamesData) {
-            return 'draw'
+            return TeamPreviousGameStauts.draw
         }
 
         const previousTeamGame = previousGamesData.partidas.find(
@@ -106,23 +106,23 @@ export function Games() {
 
         if (previousTeamGame) {
             if (previousTeamGame.placar_oficial_mandante === previousTeamGame.placar_oficial_visitante) {
-                return 'draw'
+                return TeamPreviousGameStauts.draw
             } else if (
                 previousTeamGame.placar_oficial_mandante > previousTeamGame.placar_oficial_visitante &&
                 previousTeamGame.clube_casa_id === teamId
             ) {
-                return 'victory'
+                return TeamPreviousGameStauts.victory
             } else if (
                 previousTeamGame.placar_oficial_visitante > previousTeamGame.placar_oficial_mandante &&
                 previousTeamGame.clube_visitante_id === teamId
             ) {
-                return 'victory'
+                return TeamPreviousGameStauts.victory
             } else {
-                return 'lose'
+                return TeamPreviousGameStauts.lose
             }
         }
 
-        return 'draw'
+        return TeamPreviousGameStauts.draw
     }
 
     return (
