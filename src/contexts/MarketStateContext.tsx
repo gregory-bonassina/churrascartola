@@ -14,13 +14,14 @@ interface MarketStateProps {
     rodada_atual: number
     status_mercado: number
     fechamento: MarketCloseProps
+    isMarketClosed: boolean
 }
 
 interface MarketStateProviderProps {
     children: ReactNode
 }
 
-export const MarketStatesNames = ['fechado', 'aberto']
+export const MarketStatesNames = ['indefinido', 'aberto', 'fechado']
 
 export const MarketStates = {
     CLOSED: 0,
@@ -41,11 +42,14 @@ export function MarketStateProvider({ children }: MarketStateProviderProps) {
             minuto: 0,
             timestamp: 0,
         },
+        isMarketClosed: false,
     })
 
     const loadMarket = useCallback(async () => {
         const response = await apiCartola.get('mercado/status')
-        setMarket(response.data)
+        const data = { ...response.data, isMarketClosed: response.data.status_mercado !== MarketStates.OPEN }
+
+        setMarket(data)
     }, [])
 
     useEffect(() => {

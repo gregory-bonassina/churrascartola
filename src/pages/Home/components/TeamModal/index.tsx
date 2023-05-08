@@ -1,26 +1,10 @@
 /* eslint-disable camelcase */
 import * as Dialog from '@radix-ui/react-dialog'
-import { CloseButton, Content, Overlay, PlayerContainer, TableContainer, TeamContainer } from './styles'
+import { CloseButton, Content, Overlay, PlayerCapitain, PlayerContainer, TableContainer, TeamContainer } from './styles'
 import { X } from 'phosphor-react'
 import { UserTeamInfo } from '../../../../components/UserTeamInfo'
 import { DefaultTable } from '../../../../components/DefaultTable'
-import { useContext, useEffect, useState } from 'react'
-import { PlayersContext } from '../../../../contexts/PlayersContext'
-import { apiCartola } from '../../../../lib/axios'
-
-interface PlayerProps {
-    atleta_id: number
-    clube_id: number
-    posicao_id: number
-    status_id: number
-    apelido: string
-    foto: string
-}
-
-interface TeamProps {
-    atletas: PlayerProps[]
-    reservas: PlayerProps[]
-}
+import { useTeamPlayers } from '../../../../hooks/useTeamPlayers'
 
 interface TeamModalProps {
     time_id: number
@@ -30,30 +14,8 @@ interface TeamModalProps {
 }
 
 export function TeamModal({ nome, nome_cartola, time_id, url_escudo_svg }: TeamModalProps) {
-    const [teamPlayers, setTeamPlayers] = useState<TeamProps>({
-        atletas: [],
-        reservas: [],
-    })
-    const { atletas, posicoes, clubes } = useContext(PlayersContext)
-
-    useEffect(() => {
-        const loadTeamPlayers = async () => {
-            const response = await apiCartola.get(`time/id/${time_id}`)
-
-            setTeamPlayers(response.data)
-        }
-
-        loadTeamPlayers()
-    }, [time_id])
-
-    const sortPlayers = (players: PlayerProps[]) => {
-        players?.sort(function (a, b) {
-            return a.posicao_id < b.posicao_id ? -1 : a.posicao_id > b.posicao_id ? 1 : 0
-        })
-    }
-
-    sortPlayers(teamPlayers.atletas)
-    sortPlayers(teamPlayers.reservas)
+    const [allScoredPlayers, teamPlayers] = useTeamPlayers(time_id)
+    const { atletas, posicoes, clubes } = allScoredPlayers
 
     const getPlayerPicture = (playerPicture: string) => {
         return playerPicture?.replaceAll('FORMATO', '220x220')
@@ -84,7 +46,19 @@ export function TeamModal({ nome, nome_cartola, time_id, url_escudo_svg }: TeamM
                         <tbody>
                             {teamPlayers.atletas.map((player) => (
                                 <tr key={player.atleta_id}>
-                                    <td width="50%">
+                                    <td
+                                        width="50%"
+                                        style={{
+                                            position: 'relative',
+                                            zIndex: -1,
+                                        }}
+                                    >
+                                        {player.atleta_id === teamPlayers.capitao_id && (
+                                            <PlayerCapitain>
+                                                <span>C</span>
+                                            </PlayerCapitain>
+                                        )}
+
                                         <PlayerContainer>
                                             <img src={getPlayerPicture(player.foto)} alt="" />
                                             {player.apelido}

@@ -6,7 +6,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { DefaultTable } from '../../components/DefaultTable'
 import { TeamModal } from './components/TeamModal'
 import { UserTeamInfo } from '../../components/UserTeamInfo'
-import { MarketStateContext, MarketStates } from '../../contexts/MarketStateContext'
+import { MarketStateContext } from '../../contexts/MarketStateContext'
 
 interface RankingProps {
     campeonato: number
@@ -47,7 +47,7 @@ interface ModalOpenProps {
 }
 
 export function Home() {
-    const { status_mercado } = useContext(MarketStateContext)
+    const { isMarketClosed } = useContext(MarketStateContext)
     const [teams, setTeams] = useState<TeamsProps>({
         times: [],
     })
@@ -70,7 +70,6 @@ export function Home() {
     }, [])
 
     const { times } = teams
-    const marketIsOpen = status_mercado !== MarketStates.OPEN
 
     const orderedTeams = times.sort(function (a, b) {
         return a.ranking.campeonato < b.ranking.campeonato ? -1 : a.ranking.campeonato > b.ranking.campeonato ? 1 : 0
@@ -81,7 +80,7 @@ export function Home() {
     }
 
     const handleOpenModal = ({ nome, nome_cartola, time_id, url_escudo_svg }: ModalOpenProps) => {
-        if (marketIsOpen) {
+        if (isMarketClosed) {
             setModalProps({
                 nome,
                 nome_cartola,
@@ -116,7 +115,7 @@ export function Home() {
                                 })
                             }
                             key={team.time_id}
-                            style={{ cursor: marketIsOpen ? 'pointer' : 'default' }}
+                            style={{ cursor: isMarketClosed ? 'pointer' : 'default' }}
                         >
                             <td width="50%">
                                 <UserTeamInfo
@@ -125,7 +124,7 @@ export function Home() {
                                     url_escudo_svg={team.url_escudo_svg}
                                 />
                             </td>
-                            <td>{marketIsOpen ? '0/12' : '--'}</td>
+                            <td>{isMarketClosed ? '0/12' : '--'}</td>
                             <td>{appendData(team.pontos.rodada?.toFixed(2))}</td>
                             <td>{appendData(team.pontos.campeonato)}</td>
                             <td>{`${appendData(team.ranking.campeonato)} º`}</td>

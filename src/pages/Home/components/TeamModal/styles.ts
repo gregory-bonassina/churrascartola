@@ -63,3 +63,23 @@ export const PlayerContainer = styled.div`
         height: 80px;
     }
 `
+export const PlayerCapitain = styled.div`
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e3672b;
+    border-top-left-radius: 6px;
+    width: 40px;
+    height: 40px;
+    clip-path: polygon(0 0, 0 100%, 50% 50%, 100% 0, 0 0);
+
+    span {
+        font-size: 0.875rem;
+        font-weight: bold;
+        margin-left: -18px;
+        margin-top: -14px;
+    }
+`
