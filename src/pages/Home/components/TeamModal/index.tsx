@@ -5,6 +5,7 @@ import { X } from 'phosphor-react'
 import { UserTeamInfo } from '../../../../components/UserTeamInfo'
 import { DefaultTable } from '../../../../components/DefaultTable'
 import { useTeamPlayers } from '../../../../hooks/useTeamPlayers'
+import { formatNumber } from '../../../../util/numberFormat'
 
 interface TeamModalProps {
     time_id: number
@@ -19,6 +20,22 @@ export function TeamModal({ nome, nome_cartola, time_id, url_escudo_svg }: TeamM
 
     const getPlayerPicture = (playerPicture: string) => {
         return playerPicture?.replaceAll('FORMATO', '220x220')
+    }
+
+    const getPlayerScored = (atleta_id: number) => {
+        const player = atletas[atleta_id]
+
+        if (player) {
+            let score = player.pontuacao
+
+            if (atleta_id === teamPlayers.capitao_id) {
+                score *= 1.5
+            }
+
+            return formatNumber(score).replace(',', '.')
+        }
+
+        return '--'
     }
 
     return (
@@ -71,7 +88,7 @@ export function TeamModal({ nome, nome_cartola, time_id, url_escudo_svg }: TeamM
                                         </TeamContainer>
                                     </td>
                                     <td>{posicoes[player.posicao_id]?.nome}</td>
-                                    <td>{atletas[player.atleta_id] ? atletas[player.atleta_id].pontuacao : '--'}</td>
+                                    <td>{getPlayerScored(player.atleta_id)}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -101,7 +118,7 @@ export function TeamModal({ nome, nome_cartola, time_id, url_escudo_svg }: TeamM
                                         </TeamContainer>
                                     </td>
                                     <td>{posicoes[player.posicao_id]?.nome}</td>
-                                    <td>{atletas[player.atleta_id] ? atletas[player.atleta_id].pontuacao : '--'}</td>
+                                    <td>{getPlayerScored(player.atleta_id)}</td>
                                 </tr>
                             ))}
                         </tbody>
