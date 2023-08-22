@@ -1,11 +1,12 @@
 /* eslint-disable camelcase */
 import * as Dialog from '@radix-ui/react-dialog'
-import { CloseButton, Content, Overlay, PlayerCapitain, PlayerContainer, TableContainer, TeamContainer } from './styles'
-import { X } from 'phosphor-react'
+import { CloseButton, Content, Overlay, PlayerCaptain, PlayerContainer, TableContainer, TeamContainer } from './styles'
+import { ArrowCircleDown, ArrowCircleUp, X } from 'phosphor-react'
 import { UserTeamInfo } from '../../../../components/UserTeamInfo'
 import { DefaultTable } from '../../../../components/DefaultTable'
 import { useTeamPlayers } from '../../../../hooks/useTeamPlayers'
 import { formatNumber } from '../../../../util/numberFormat'
+import { useTheme } from 'styled-components'
 
 interface TeamModalProps {
     time_id: number
@@ -17,6 +18,7 @@ interface TeamModalProps {
 export function TeamModal({ nome, nome_cartola, time_id, url_escudo_svg }: TeamModalProps) {
     const [allScoredPlayers, teamPlayers] = useTeamPlayers(time_id)
     const { atletas, posicoes, clubes } = allScoredPlayers
+    const theme = useTheme()
 
     const getPlayerPicture = (playerPicture: string) => {
         return playerPicture?.replaceAll('FORMATO', '220x220')
@@ -71,14 +73,15 @@ export function TeamModal({ nome, nome_cartola, time_id, url_escudo_svg }: TeamM
                                         }}
                                     >
                                         {player.atleta_id === teamPlayers.capitao_id && (
-                                            <PlayerCapitain>
+                                            <PlayerCaptain>
                                                 <span>C</span>
-                                            </PlayerCapitain>
+                                            </PlayerCaptain>
                                         )}
 
                                         <PlayerContainer>
                                             <img src={getPlayerPicture(player.foto)} alt="" />
                                             {player.apelido}
+                                            {player.entrou && <ArrowCircleUp size={24} color={theme['green-500']} />}
                                         </PlayerContainer>
                                     </td>
                                     <td>
@@ -103,12 +106,13 @@ export function TeamModal({ nome, nome_cartola, time_id, url_escudo_svg }: TeamM
                             </tr>
                         </thead>
                         <tbody>
-                            {teamPlayers.reservas.map((player) => (
+                            {teamPlayers.reservas?.map((player) => (
                                 <tr key={player.atleta_id}>
                                     <td width="50%">
                                         <PlayerContainer>
                                             <img src={getPlayerPicture(player.foto)} alt="" />
                                             {player.apelido}
+                                            {player.saiu && <ArrowCircleDown size={24} color={theme['red-500']} />}
                                         </PlayerContainer>
                                     </td>
                                     <td>

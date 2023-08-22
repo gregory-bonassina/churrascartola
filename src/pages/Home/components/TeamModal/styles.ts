@@ -63,7 +63,7 @@ export const PlayerContainer = styled.div`
         height: 80px;
     }
 `
-export const PlayerCapitain = styled.div`
+export const PlayerCaptain = styled.div`
     position: absolute;
     left: 0;
     top: 0;
