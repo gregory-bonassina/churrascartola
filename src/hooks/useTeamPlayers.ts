@@ -10,12 +10,19 @@ interface PlayerProps {
     status_id: number
     apelido: string
     foto: string
+    entrou: boolean
+    saiu: boolean
 }
 
 interface TeamProps {
     atletas: PlayerProps[]
     reservas: PlayerProps[]
     capitao_id: number
+}
+
+interface SubstitutionsProps {
+    entrou: PlayerProps
+    saiu: PlayerProps
 }
 
 export const useTeamPlayers = (time_id: number) => {
@@ -25,6 +32,7 @@ export const useTeamPlayers = (time_id: number) => {
         reservas: [],
         capitao_id: 0,
     })
+    const [substituitions, setSubstituitions] = useState<SubstitutionsProps[]>([])
 
     useEffect(() => {
         const loadTeamPlayers = async () => {
@@ -33,8 +41,39 @@ export const useTeamPlayers = (time_id: number) => {
             setTeamPlayers(response.data)
         }
 
+        const loadSubstituitions = async () => {
+            const response = await apiCartola.get(`time/substituicoes/${time_id}`)
+
+            const data = response.data
+
+            if (data) {
+                setSubstituitions(data)
+            }
+        }
+
         loadTeamPlayers()
+        loadSubstituitions()
     }, [time_id])
+
+    teamPlayers.atletas = teamPlayers.atletas.map((atleta) => {
+        const subs = substituitions.findLast((substituition) => substituition.saiu.atleta_id === atleta.atleta_id)
+
+        if (subs) {
+            return { ...subs.entrou, entrou: true }
+        }
+
+        return atleta
+    })
+
+    teamPlayers.reservas = teamPlayers.reservas?.map((atleta) => {
+        const subs = substituitions.findLast((substituition) => substituition.entrou.atleta_id === atleta.atleta_id)
+
+        if (subs) {
+            return { ...subs.saiu, saiu: true }
+        }
+
+        return atleta
+    })
 
     const sortPlayers = (players: PlayerProps[]) => {
         players?.sort(function (a, b) {
