@@ -56,7 +56,7 @@ export const useTeamPlayers = (time_id: number) => {
     }, [time_id])
 
     teamPlayers.atletas = teamPlayers.atletas.map((atleta) => {
-        const subs = substituitions.findLast((substituition) => substituition.saiu.atleta_id === atleta.atleta_id)
+        const subs = substituitions.find((substituition) => substituition.saiu.atleta_id === atleta.atleta_id)
 
         if (subs) {
             return { ...subs.entrou, entrou: true }
@@ -66,7 +66,7 @@ export const useTeamPlayers = (time_id: number) => {
     })
 
     teamPlayers.reservas = teamPlayers.reservas?.map((atleta) => {
-        const subs = substituitions.findLast((substituition) => substituition.entrou.atleta_id === atleta.atleta_id)
+        const subs = substituitions.find((substituition) => substituition.entrou.atleta_id === atleta.atleta_id)
 
         if (subs) {
             return { ...subs.saiu, saiu: true }
