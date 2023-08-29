@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import * as Select from '@radix-ui/react-select'
+// import * as Select from '@radix-ui/react-select'
 import { useContext } from 'react'
 
 import { MarketStateContext, MarketStatesNames } from '../../contexts/MarketStateContext'
@@ -9,15 +9,15 @@ import { MarketStateCountdown } from '../MarketStateCountdown'
 import {
     MarketStateContainer,
     MarketStateContent,
-    SelectContent,
-    SelectItem,
-    SelectItemIndicator,
-    SelectLabel,
-    SelectSeparator,
-    SelectTrigger,
-    SelectViewPort,
+    // SelectContent,
+    // SelectItem,
+    // SelectItemIndicator,
+    // SelectLabel,
+    // SelectSeparator,
+    // SelectTrigger,
+    // SelectViewPort,
 } from './styles'
-import { CaretDown, CaretUp, Check } from 'phosphor-react'
+// import { CaretDown, CaretUp, Check } from 'phosphor-react'
 
 const MarketStateCloseTypes = {
     CLOSE: 'Fecha',
@@ -44,7 +44,7 @@ export function MarketState() {
                     {closeLabel} em {marketCloseDate} às {marketCloseTime}
                 </span>
                 {!isMarketClosed && <MarketStateCountdown closeMarketTimestamp={fechamento.timestamp} />}
-                <Select.Root>
+                {/* <Select.Root>
                     <SelectTrigger>
                         <Select.Value placeholder={`Rodada ${rodada_atual}`} />
                         <Select.Icon>
@@ -82,7 +82,7 @@ export function MarketState() {
                             <Select.Arrow />
                         </SelectContent>
                     </Select.Portal>
-                </Select.Root>
+                </Select.Root> */}
             </MarketStateContent>
         </MarketStateContainer>
     )

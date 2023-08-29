@@ -12,11 +12,9 @@ export function Header() {
                     <NavLink to="/" title="Home">
                         Home
                     </NavLink>
-                    /
                     <NavLink to="/games" title="Games">
                         Jogos
                     </NavLink>
-                    /
                     <NavLink to="/top-ranked-players" title="Games">
                         Mais escalados
                     </NavLink>

@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { media } from '../../styles/media'
 
 export const HeaderContainer = styled.header`
     background: ${(props) => props.theme['gray-900']};
@@ -14,6 +15,11 @@ export const HeaderContent = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 10px;
+
+    ${media.sm`
+        flex-direction: column;
+    `}
 
     img {
         width: 200px;
