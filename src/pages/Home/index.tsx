@@ -91,6 +91,18 @@ export function Home() {
         }
     }
 
+    // const orderTeams = () => {
+    //     const order = times.sort(function (a, b) {
+    //         return a.ranking.rodada < b.ranking.rodada ? -1 : a.ranking.rodada > b.ranking.rodada ? 1 : 0
+    //     })
+
+    //     setTeams({
+    //         times: order,
+    //     })
+
+    //     console.log(order)
+    // }
+
     return (
         <DefaultTable>
             <thead>

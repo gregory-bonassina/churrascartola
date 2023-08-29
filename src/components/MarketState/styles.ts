@@ -1,5 +1,6 @@
 import * as Select from '@radix-ui/react-select'
 import styled from 'styled-components'
+import { media } from '../../styles/media'
 
 export const MarketStateContainer = styled.section`
     width: 100%;
@@ -15,6 +16,11 @@ export const MarketStateContent = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    ${media.md`
+        flex-direction: column;
+        gap: 15px;
+    `}
 
     span {
         display: flex;
