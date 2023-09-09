@@ -140,20 +140,20 @@ export function Games() {
                         <td width="50%">
                             <TeamsContainer>
                                 {!game.valida && <ValidGame>* rodada não é válida para o Cartola</ValidGame>}
-                                <TeamContent alignContent="left">
-                                    <TeamPreviousGameStatus status={getPreviousTeamGameResult(game.clube_casa_id)} />
+                                <TeamContent $alignContent="left">
+                                    <TeamPreviousGameStatus $status={getPreviousTeamGameResult(game.clube_casa_id)} />
                                     {game.clube_casa_posicao}º
                                     <img src={getTeamShield(game.clube_casa_id)} alt="" />
                                     {getTeamAbreviation(game.clube_casa_id)}
                                 </TeamContent>
                                 {game.placar_oficial_mandante}&nbsp;X&nbsp;
                                 {game.placar_oficial_visitante}
-                                <TeamContent alignContent="right">
+                                <TeamContent $alignContent="right">
                                     {getTeamAbreviation(game.clube_visitante_id)}
                                     <img src={getTeamShield(game.clube_visitante_id)} alt="" />
                                     {game.clube_visitante_posicao}º
                                     <TeamPreviousGameStatus
-                                        status={getPreviousTeamGameResult(game.clube_visitante_id)}
+                                        $status={getPreviousTeamGameResult(game.clube_visitante_id)}
                                     />
                                 </TeamContent>
                             </TeamsContainer>
