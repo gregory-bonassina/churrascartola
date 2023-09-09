@@ -1,4 +1,5 @@
-import { CSSObject, FlattenSimpleInterpolation, css } from 'styled-components'
+import { css } from 'styled-components'
+import { Interpolation, RuleSet, Styles } from 'styled-components/dist/types'
 
 const device = {
     xs: '400px',
@@ -10,10 +11,7 @@ const device = {
 }
 
 interface MediaQueryFn {
-    (
-        first: TemplateStringsArray | CSSObject,
-        ...interpolations: FlattenSimpleInterpolation[]
-    ): FlattenSimpleInterpolation
+    (styles: Styles<object>, ...interpolations: Interpolation<object>[]): RuleSet<object>
 }
 
 interface Media {
