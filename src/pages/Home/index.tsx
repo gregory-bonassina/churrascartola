@@ -1,43 +1,13 @@
 /* eslint-disable camelcase */
-import { useContext, useEffect, useState } from 'react'
-import { apiCartola } from '../../lib/axios'
 import * as Dialog from '@radix-ui/react-dialog'
+import { useContext, useState } from 'react'
 
 import { DefaultTable } from '../../components/DefaultTable'
-import { TeamModal } from './components/TeamModal'
 import { UserTeamInfo } from '../../components/UserTeamInfo'
 import { MarketStateContext } from '../../contexts/MarketStateContext'
-
-interface RankingProps {
-    campeonato: number
-    mes: number
-    rodada: number
-    turno: number
-}
-
-interface PointsProps {
-    rodada: number
-    mes: number
-    turno: number
-    campeonato: number
-    capitao: number
-}
-
-interface TeamProps {
-    time_id: number
-    foto_perfil: string
-    nome: string
-    nome_cartola: string
-    patrimonio: number
-    ranking: RankingProps
-    pontos: PointsProps
-    slug: string
-    url_escudo_svg: string
-}
-
-interface TeamsProps {
-    times: TeamProps[]
-}
+import { TeamProps, TeamsContext } from '../../contexts/TeamsContext'
+import { RankingOrders, SelectRankingOrder } from './components/SelectRankingOrder'
+import { TeamModal } from './components/TeamModal'
 
 interface ModalOpenProps {
     time_id: number
@@ -48,32 +18,9 @@ interface ModalOpenProps {
 
 export function Home() {
     const { isMarketClosed } = useContext(MarketStateContext)
-    const [teams, setTeams] = useState<TeamsProps>({
-        times: [],
-    })
+    const { times, rankingOrder } = useContext(TeamsContext)
     const [modalOpen, setModalOpen] = useState(false)
     const [modalProps, setModalProps] = useState<ModalOpenProps>({} as ModalOpenProps)
-
-    /* Trás os valores da liga */
-    const loadTeams = async () => {
-        const response = await apiCartola.get<TeamsProps>(`auth/liga/${import.meta.env.VITE_LIGA}`, {
-            headers: {
-                'X-GLB-Token': import.meta.env.VITE_GLBID,
-            },
-        })
-
-        setTeams(response.data)
-    }
-
-    useEffect(() => {
-        loadTeams()
-    }, [])
-
-    const { times } = teams
-
-    const orderedTeams = times.sort(function (a, b) {
-        return a.ranking.campeonato < b.ranking.campeonato ? -1 : a.ranking.campeonato > b.ranking.campeonato ? 1 : 0
-    })
 
     const appendData = (data: number | string) => {
         return data || '--'
@@ -91,32 +38,38 @@ export function Home() {
         }
     }
 
-    // const orderTeams = () => {
-    //     const order = times.sort(function (a, b) {
-    //         return a.ranking.rodada < b.ranking.rodada ? -1 : a.ranking.rodada > b.ranking.rodada ? 1 : 0
-    //     })
-
-    //     setTeams({
-    //         times: order,
-    //     })
-
-    //     console.log(order)
-    // }
+    const getRanking = (team: TeamProps) => {
+        switch (rankingOrder) {
+            case RankingOrders.TURN:
+                return team.pontos.turno
+            case RankingOrders.MONTH:
+                return team.pontos.mes
+            case RankingOrders.LAST_ROUND:
+                return team.pontos.rodada?.toFixed(2)
+            case RankingOrders.PATRIMONY:
+                return team.patrimonio
+            case RankingOrders.CHAMPIONSHIP:
+            default:
+                return team.pontos.campeonato
+        }
+    }
 
     return (
         <DefaultTable>
             <thead>
                 <tr>
                     <th>TIME</th>
-                    <th>JOG. PONTUADOS</th>
-                    <th>RODADA</th>
-                    <th>TOTAL</th>
+                    {isMarketClosed && <th>JOG. PONTUADOS</th>}
+                    {isMarketClosed && <th>RODADA</th>}
+                    <th>
+                        <SelectRankingOrder isMarketClosed={isMarketClosed} />
+                    </th>
                     <th>POSIÇÃO</th>
                 </tr>
             </thead>
             <tbody>
                 <Dialog.Root open={modalOpen} onOpenChange={setModalOpen}>
-                    {orderedTeams.map((team) => (
+                    {times.map((team, index) => (
                         <tr
                             onClick={() =>
                                 handleOpenModal({
@@ -136,10 +89,10 @@ export function Home() {
                                     url_escudo_svg={team.url_escudo_svg}
                                 />
                             </td>
-                            <td>{isMarketClosed ? '0/12' : '--'}</td>
-                            <td>{appendData(team.pontos.rodada?.toFixed(2))}</td>
-                            <td>{appendData(team.pontos.campeonato)}</td>
-                            <td>{`${appendData(team.ranking.campeonato)} º`}</td>
+                            {isMarketClosed && <td>{'0/12'}</td>}
+                            {isMarketClosed && <td>{appendData(team.pontos.rodada?.toFixed(2))}</td>}
+                            <td>{appendData(getRanking(team))}</td>
+                            <td width="5%">{`${appendData(index + 1)} º`}</td>
                         </tr>
                     ))}
                     {modalOpen && (
