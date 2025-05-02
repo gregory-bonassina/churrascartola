@@ -1,5 +1,5 @@
 import { ReactNode, createContext, useEffect, useState } from 'react'
-import { apiCartola } from '../lib/axios'
+import { apiCartolaAuth } from '../lib/axios'
 
 interface RankingProps {
     campeonato: number
@@ -60,12 +60,7 @@ export function TeamsProvider({ children }: TeamsContextPropsProps) {
 
     /* Trás os valores da liga */
     const loadTeams = async () => {
-        const response = await apiCartola.get<TeamsProps>(`auth/liga/${import.meta.env.VITE_LIGA}`, {
-            headers: {
-                'X-GLB-Auth': 'oidc',
-                'Authorization': `Bearer ${import.meta.env.VITE_GLBID}`,
-            },
-        })
+        const response = await apiCartolaAuth(`auth/liga/${import.meta.env.VITE_LIGA}`)
 
         setTeams(response.data)
     }

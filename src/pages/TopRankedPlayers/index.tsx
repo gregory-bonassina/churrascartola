@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { apiCartola } from '../../lib/axios'
+import { apiCartolaAuth } from '../../lib/axios'
 import { DefaultTable } from '../../components/DefaultTable'
 import { PlayerContainer, TeamContainer } from './styles'
 import { PlayersContext } from '../../contexts/PlayersContext'
@@ -28,7 +28,8 @@ export default function TopRankedPlayers() {
     const [topRankedPlayers, setTopRankedPlayers] = useState<TopRankedPlayersProps[]>([])
 
     const loadTopRankedPlayers = async () => {
-        const response = await apiCartola.get('mercado/destaques')
+        const response = await apiCartolaAuth('auth/mercado/destaques')
+
         setTopRankedPlayers(response.data)
     }
 
@@ -67,7 +68,7 @@ export default function TopRankedPlayers() {
                 </tr>
             </thead>
             <tbody>
-                {topRankedPlayers.map((topRankedPlayer, index) => (
+                {topRankedPlayers?.map((topRankedPlayer, index) => (
                     <tr key={topRankedPlayer.Atleta.atleta_id}>
                         <td>{index + 1}º</td>
                         <td width="50%">
