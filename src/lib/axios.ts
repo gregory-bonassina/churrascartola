@@ -8,5 +8,5 @@ export const api = axios.create({
 })
 
 export const apiCartola = axios.create({
-    baseURL: `${corsUrl}https://api.cartolafc.globo.com`,
+    baseURL: `${corsUrl}https://api.cartola.globo.com`,
 })

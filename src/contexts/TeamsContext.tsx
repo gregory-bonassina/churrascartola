@@ -62,7 +62,8 @@ export function TeamsProvider({ children }: TeamsContextPropsProps) {
     const loadTeams = async () => {
         const response = await apiCartola.get<TeamsProps>(`auth/liga/${import.meta.env.VITE_LIGA}`, {
             headers: {
-                'X-GLB-Token': import.meta.env.VITE_GLBID,
+                'X-GLB-Auth': 'oidc',
+                'Authorization': `Bearer ${import.meta.env.VITE_GLBID}`,
             },
         })
 
