@@ -2,6 +2,7 @@
 
 import { ReactNode, createContext, useCallback, useEffect, useState } from 'react'
 import { apiCartola } from '../lib/axios'
+import { cartolaPath } from '../lib/cartolaRoutes'
 
 interface MarketCloseProps {
     dia: number
@@ -48,7 +49,7 @@ export function MarketStateProvider({ children }: MarketStateProviderProps) {
     })
 
     const loadMarket = useCallback(async () => {
-        const response = await apiCartola.get('mercado/status')
+        const response = await apiCartola.get(cartolaPath('mercadoStatus'))
         const data = {
             ...response.data,
             isMarketClosed: response.data.status_mercado !== MarketStates.OPEN,

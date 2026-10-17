@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { isAllowedAuthPath } from '../../../../lib/cartolaRoutes'
 
 const CARTOLA_API_URL = 'https://api.cartola.globo.com'
 
@@ -10,6 +11,10 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const headers: Record<string, string> = { Accept: 'application/json' }
 
     if (path[0] === 'auth') {
+        if (!isAllowedAuthPath(path)) {
+            return NextResponse.json({ error: 'Rota não permitida' }, { status: 403 })
+        }
+
         const glbId = process.env.GLBID
 
         if (!glbId) {

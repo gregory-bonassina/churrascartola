@@ -2,6 +2,7 @@
 
 import { ReactNode, createContext, useEffect, useState } from 'react'
 import { apiCartola } from '../lib/axios'
+import { cartolaPath } from '../lib/cartolaRoutes'
 
 interface PlayerProps {
     atleta_id: number
@@ -70,13 +71,13 @@ export function PlayersProvider({ children }: AllScoredPlayersProviderProps) {
     })
 
     const loadAllScoredPlayers = async () => {
-        const response = await apiCartola.get('atletas/pontuados')
+        const response = await apiCartola.get(cartolaPath('atletasPontuados'))
 
         setAllScoredPlayers(response.data)
     }
 
     const loadAllPlayers = async () => {
-        const response = await apiCartola.get('atletas/mercado')
+        const response = await apiCartola.get(cartolaPath('atletasMercado'))
 
         setAllPlayers(response.data)
     }

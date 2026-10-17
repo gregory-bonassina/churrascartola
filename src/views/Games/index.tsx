@@ -4,6 +4,7 @@ import { useContext, useEffect, useMemo, useState } from 'react'
 import { TeamContent, TeamPreviousGameStatus, TeamPreviousGameStauts, TeamsContainer, ValidGame } from './styles'
 import { MarketStateContext } from '../../contexts/MarketStateContext'
 import { apiCartola } from '../../lib/axios'
+import { cartolaPath } from '../../lib/cartolaRoutes'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { DefaultTable } from '../../components/DefaultTable'
@@ -54,7 +55,7 @@ export function Games() {
     useEffect(() => {
         const loadGamesData = async () => {
             if (rodada_atual) {
-                const response = await apiCartola.get(`partidas/${rodada_atual}`)
+                const response = await apiCartola.get(cartolaPath('partidas', { rodada: rodada_atual }))
 
                 setGamesData(response.data)
             }
@@ -64,7 +65,7 @@ export function Games() {
             const previous = rodada_atual - 1 !== -1
 
             if (rodada_atual && previous) {
-                const response = await apiCartola.get(`partidas/${rodada_atual - 1}`)
+                const response = await apiCartola.get(cartolaPath('partidas', { rodada: rodada_atual - 1 }))
 
                 setPreviousGamesData(response.data)
             }

@@ -3,6 +3,7 @@
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { PlayersContext } from '../contexts/PlayersContext'
 import { apiCartola } from '../lib/axios'
+import { cartolaPath } from '../lib/cartolaRoutes'
 
 interface PlayerProps {
     atleta_id: number
@@ -45,7 +46,7 @@ export const useTeamPlayers = (time_id: number) => {
         let ignore = false
 
         const loadTeamPlayers = async () => {
-            const response = await apiCartola.get(`time/id/${time_id}`)
+            const response = await apiCartola.get(cartolaPath('time', { timeId: time_id }))
 
             if (!ignore) {
                 setLoadedTeam(response.data)
@@ -53,7 +54,7 @@ export const useTeamPlayers = (time_id: number) => {
         }
 
         const loadSubstituitions = async () => {
-            const response = await apiCartola.get(`time/substituicoes/${time_id}`)
+            const response = await apiCartola.get(cartolaPath('timeSubstituicoes', { timeId: time_id }))
 
             const data = response.data
 

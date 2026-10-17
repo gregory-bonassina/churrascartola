@@ -2,6 +2,7 @@
 
 import { ReactNode, createContext, useEffect, useState } from 'react'
 import { apiCartolaAuth } from '../lib/axios'
+import { cartolaPath } from '../lib/cartolaRoutes'
 
 interface RankingProps {
     campeonato: number
@@ -89,7 +90,7 @@ export function TeamsProvider({ children }: TeamsContextPropsProps) {
 
         setIsLoading(true)
 
-        apiCartolaAuth(`auth/liga/${process.env.NEXT_PUBLIC_LIGA}?orderBy=${orderByParam[rankingOrder]}&page=${page}`)
+        apiCartolaAuth(`${cartolaPath('liga')}?orderBy=${orderByParam[rankingOrder]}&page=${page}`)
             .then((response) => {
                 if (isCurrent) {
                     setTeams(response.data)
