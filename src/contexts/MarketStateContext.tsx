@@ -49,7 +49,10 @@ export function MarketStateProvider({ children }: MarketStateProviderProps) {
 
     const loadMarket = useCallback(async () => {
         const response = await apiCartola.get('mercado/status')
-        const data = { ...response.data, isMarketClosed: response.data.status_mercado !== MarketStates.OPEN }
+        const data = {
+            ...response.data,
+            isMarketClosed: response.data.status_mercado !== MarketStates.OPEN,
+        }
 
         setMarket(data)
     }, [])

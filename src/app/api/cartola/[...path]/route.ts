@@ -28,7 +28,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
         return new NextResponse(response.body, {
             status: response.status,
-            headers: { 'Content-Type': response.headers.get('Content-Type') ?? 'application/json' },
+            headers: {
+                'Content-Type': response.headers.get('Content-Type') ?? 'application/json',
+            },
         })
     } catch {
         return NextResponse.json({ error: 'Falha ao consultar a API do Cartola' }, { status: 502 })

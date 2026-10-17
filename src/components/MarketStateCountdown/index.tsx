@@ -1,7 +1,7 @@
 'use client'
 
-import { differenceInSeconds, intervalToDuration } from 'date-fns'
-import { Timer } from '@phosphor-icons/react'
+import { differenceInSeconds } from 'date-fns'
+import { TimerIcon } from '@phosphor-icons/react'
 import { useEffect, useState } from 'react'
 
 interface MarketStateCountdownProps {
@@ -13,16 +13,14 @@ export function MarketStateCountdown({ closeMarketTimestamp }: MarketStateCountd
 
     const closeMaketDateTime = closeMarketTimestamp * 1000
 
-    const duration = intervalToDuration({
-        start: 0,
-        end: amountSecondsPassed * 1000,
-    })
+    const zeroPad = (num: number) => String(num).padStart(2, '0')
 
-    const zeroPad = (num: number | undefined) => String(num).padStart(2, '0')
+    const days = Math.floor(amountSecondsPassed / 86400)
+    const hours = Math.floor((amountSecondsPassed % 86400) / 3600)
+    const minutes = Math.floor((amountSecondsPassed % 3600) / 60)
+    const seconds = amountSecondsPassed % 60
 
-    const formattedDate = [duration.hours, duration.minutes, duration.seconds].map(zeroPad).join(':')
-
-    const formattedDateWithDays = `${duration.days ? duration.days : 0}D ${formattedDate}`
+    const formattedDateWithDays = `${days}D ${[hours, minutes, seconds].map(zeroPad).join(':')}`
 
     useEffect(() => {
         const updateCountdown = () => {
@@ -55,7 +53,7 @@ export function MarketStateCountdown({ closeMarketTimestamp }: MarketStateCountd
 
     return (
         <span>
-            <Timer size={24} />
+            <TimerIcon size={24} />
             {formattedDateWithDays}
         </span>
     )

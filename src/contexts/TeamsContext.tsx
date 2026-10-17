@@ -32,6 +32,9 @@ export interface TeamProps {
 
 interface TeamsProps {
     times: TeamProps[]
+    liga?: {
+        total_times_liga?: number
+    }
 }
 
 interface TeamsContextPropsProps {
@@ -41,7 +44,13 @@ interface TeamsContextPropsProps {
 interface TeamsContextProps {
     times: TeamProps[]
     rankingOrder: string
+    page: number
+    pageSize: number
+    hasPreviousPage: boolean
+    hasNextPage: boolean
+    isLoading: boolean
     handleOrderTeams: (order: string) => void
+    handlePageChange: (page: number) => void
 }
 
 export enum RankingOrders {
@@ -50,6 +59,18 @@ export enum RankingOrders {
     LAST_ROUND = 'ÚLTIMA RODADA',
     PATRIMONY = 'PATRIMÔNIO',
     CHAMPIONSHIP = 'CAMPEONATO',
+    ROUND = 'RODADA ATUAL',
+}
+
+export const TEAMS_PAGE_SIZE = 20
+
+const orderByParam: Record<string, string> = {
+    [RankingOrders.TURN]: 'turno',
+    [RankingOrders.MONTH]: 'mes',
+    [RankingOrders.LAST_ROUND]: 'rodada',
+    [RankingOrders.ROUND]: 'rodada',
+    [RankingOrders.PATRIMONY]: 'patrimonio',
+    [RankingOrders.CHAMPIONSHIP]: 'campeonato',
 }
 
 export const TeamsContext = createContext({} as TeamsContextProps)
@@ -59,47 +80,63 @@ export function TeamsProvider({ children }: TeamsContextPropsProps) {
         times: [],
     })
     const [rankingOrder, setRankingOrder] = useState(RankingOrders.CHAMPIONSHIP.toString())
+    const [page, setPage] = useState(1)
+    const [isLoading, setIsLoading] = useState(false)
 
-    /* Trás os valores da liga */
-    const loadTeams = async () => {
-        const response = await apiCartolaAuth(`auth/liga/${process.env.NEXT_PUBLIC_LIGA}`)
-
-        setTeams(response.data)
-    }
-
+    /* Trás os valores da liga já ordenados e paginados pela API */
     useEffect(() => {
-        loadTeams().catch(() => {})
-    }, [])
+        let isCurrent = true
 
-    const { times } = teams
+        setIsLoading(true)
+
+        apiCartolaAuth(`auth/liga/${process.env.NEXT_PUBLIC_LIGA}?orderBy=${orderByParam[rankingOrder]}&page=${page}`)
+            .then((response) => {
+                if (isCurrent) {
+                    setTeams(response.data)
+                }
+            })
+            .catch(() => {})
+            .finally(() => {
+                if (isCurrent) {
+                    setIsLoading(false)
+                }
+            })
+
+        return () => {
+            isCurrent = false
+        }
+    }, [rankingOrder, page])
+
+    const { times, liga } = teams
+
+    const totalTeams = liga?.total_times_liga
+    const hasPreviousPage = page > 1
+    const hasNextPage = totalTeams ? page * TEAMS_PAGE_SIZE < totalTeams : times.length >= TEAMS_PAGE_SIZE
 
     const handleOrderTeams = (order: string) => {
-        const orderedTeams = [...times].sort(function (a, b) {
-            switch (order) {
-                case RankingOrders.TURN:
-                    return a.ranking.turno < b.ranking.turno ? -1 : a.ranking.turno > b.ranking.turno ? 1 : 0
-                case RankingOrders.MONTH:
-                    return a.ranking.mes < b.ranking.mes ? -1 : a.ranking.mes > b.ranking.mes ? 1 : 0
-                case RankingOrders.LAST_ROUND:
-                    return a.ranking.rodada < b.ranking.rodada ? -1 : a.ranking.rodada > b.ranking.rodada ? 1 : 0
-                case RankingOrders.PATRIMONY:
-                    return a.patrimonio > b.patrimonio ? -1 : a.patrimonio < b.patrimonio ? 1 : 0
-                case RankingOrders.CHAMPIONSHIP:
-                default:
-                    return a.ranking.campeonato < b.ranking.campeonato
-                        ? -1
-                        : a.ranking.campeonato > b.ranking.campeonato
-                          ? 1
-                          : 0
-            }
-        })
-
+        setPage(1)
         setRankingOrder(order)
-
-        setTeams({
-            times: orderedTeams,
-        })
     }
 
-    return <TeamsContext.Provider value={{ times, rankingOrder, handleOrderTeams }}>{children}</TeamsContext.Provider>
+    const handlePageChange = (newPage: number) => {
+        setPage(Math.max(1, newPage))
+    }
+
+    return (
+        <TeamsContext.Provider
+            value={{
+                times,
+                rankingOrder,
+                page,
+                pageSize: TEAMS_PAGE_SIZE,
+                hasPreviousPage,
+                hasNextPage,
+                isLoading,
+                handleOrderTeams,
+                handlePageChange,
+            }}
+        >
+            {children}
+        </TeamsContext.Provider>
+    )
 }

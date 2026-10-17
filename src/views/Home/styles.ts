@@ -64,3 +64,24 @@ export const SelectItemIndicator = styled(Select.ItemIndicator)`
     color: ${(props) => props.theme['red-400']};
     font-weight: bold;
 `
+
+export const Pagination = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem 0;
+
+    button {
+        all: unset;
+        cursor: pointer;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        background-color: ${(props) => props.theme['gray-600']};
+
+        &:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+    }
+`
