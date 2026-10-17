@@ -1,4 +1,6 @@
-import { CaretDown, CaretUp, Check } from 'phosphor-react'
+'use client'
+
+import { CaretDown, CaretUp, Check } from '@phosphor-icons/react'
 import {
     SelectContent,
     SelectItem,

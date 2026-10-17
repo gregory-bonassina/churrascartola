@@ -1,10 +1,11 @@
-/* eslint-disable camelcase */
-import { useContext, useEffect, useState } from 'react'
+'use client'
+
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { TeamContent, TeamPreviousGameStatus, TeamPreviousGameStauts, TeamsContainer, ValidGame } from './styles'
 import { MarketStateContext } from '../../contexts/MarketStateContext'
 import { apiCartola } from '../../lib/axios'
 import { format } from 'date-fns'
-import ptBR from 'date-fns/locale/pt-BR'
+import { ptBR } from 'date-fns/locale'
 import { DefaultTable } from '../../components/DefaultTable'
 
 interface TeamShields {
@@ -69,15 +70,19 @@ export function Games() {
             }
         }
 
-        loadGamesData()
-        loadPreviousGamesData()
+        loadGamesData().catch(() => {})
+        loadPreviousGamesData().catch(() => {})
     }, [rodada_atual])
 
-    const { clubes, partidas } = gamesData
+    const { clubes } = gamesData
 
-    partidas.sort(function (a, b) {
-        return a.timestamp < b.timestamp ? -1 : a.timestamp > b.timestamp ? 1 : 0
-    })
+    const partidas = useMemo(
+        () =>
+            [...gamesData.partidas].sort(function (a, b) {
+                return a.timestamp < b.timestamp ? -1 : a.timestamp > b.timestamp ? 1 : 0
+            }),
+        [gamesData.partidas],
+    )
 
     const getTeam = (teamId: number) => {
         return clubes[teamId]

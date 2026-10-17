@@ -1,3 +1,5 @@
+'use client'
+
 import { useContext, useEffect, useState } from 'react'
 import { apiCartolaAuth } from '../../lib/axios'
 import { DefaultTable } from '../../components/DefaultTable'
@@ -34,7 +36,7 @@ export default function TopRankedPlayers() {
     }
 
     useEffect(() => {
-        loadTopRankedPlayers()
+        loadTopRankedPlayers().catch(() => {})
     }, [])
 
     const getPlayerPicture = (playerPicture: string) => {

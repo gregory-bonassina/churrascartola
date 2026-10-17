@@ -1,3 +1,5 @@
+'use client'
+
 import { ReactNode, createContext, useEffect, useState } from 'react'
 import { apiCartolaAuth } from '../lib/axios'
 
@@ -60,19 +62,19 @@ export function TeamsProvider({ children }: TeamsContextPropsProps) {
 
     /* Trás os valores da liga */
     const loadTeams = async () => {
-        const response = await apiCartolaAuth(`auth/liga/${import.meta.env.VITE_LIGA}`)
+        const response = await apiCartolaAuth(`auth/liga/${process.env.NEXT_PUBLIC_LIGA}`)
 
         setTeams(response.data)
     }
 
     useEffect(() => {
-        loadTeams()
+        loadTeams().catch(() => {})
     }, [])
 
     const { times } = teams
 
     const handleOrderTeams = (order: string) => {
-        const orderedTeams = times.sort(function (a, b) {
+        const orderedTeams = [...times].sort(function (a, b) {
             switch (order) {
                 case RankingOrders.TURN:
                     return a.ranking.turno < b.ranking.turno ? -1 : a.ranking.turno > b.ranking.turno ? 1 : 0
@@ -87,8 +89,8 @@ export function TeamsProvider({ children }: TeamsContextPropsProps) {
                     return a.ranking.campeonato < b.ranking.campeonato
                         ? -1
                         : a.ranking.campeonato > b.ranking.campeonato
-                        ? 1
-                        : 0
+                          ? 1
+                          : 0
             }
         })
 

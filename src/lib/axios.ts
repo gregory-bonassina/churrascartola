@@ -1,23 +1,10 @@
 import axios from 'axios'
 
-// const corsUrl = 'https://cors-anywhere.herokuapp.com/'
-const corsUrl = import.meta.env.VITE_CORS
-
-export const api = axios.create({
-    baseURL: 'http://localhost:3333',
-})
-
+// As requisições passam pelo route handler do Next (src/app/api/cartola), que injeta o token no servidor
 export const apiCartola = axios.create({
-    baseURL: `${corsUrl}https://api.cartola.globo.com`,
+    baseURL: '/api/cartola',
 })
 
 export const apiCartolaAuth = (url: string, headers: Record<string, string> = {}) => {
-    return apiCartola.get(url, {
-        headers: {
-            ...headers,
-            'Content-Type': 'application/json',
-            'X-GLB-Auth': 'oidc',
-            'Authorization': `Bearer ${import.meta.env.VITE_GLBID}`,
-        },
-    });
+    return apiCartola.get(url, { headers })
 }

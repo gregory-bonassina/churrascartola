@@ -1,3 +1,5 @@
+'use client'
+
 import * as Select from '@radix-ui/react-select'
 import styled from 'styled-components'
 import { media } from '../../styles/media'
@@ -49,7 +51,9 @@ export const SelectContent = styled(Select.Content)`
     overflow: hidden;
     background-color: ${(props) => props.theme['gray-800']};
     border-radius: 6px;
-    box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35), 0px 10px 20px -15px rgba(22, 23, 24, 0.2);
+    box-shadow:
+        0px 10px 38px -10px rgba(22, 23, 24, 0.35),
+        0px 10px 20px -15px rgba(22, 23, 24, 0.2);
 `
 
 export const SelectViewPort = styled(Select.Viewport)`

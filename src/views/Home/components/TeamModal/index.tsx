@@ -1,7 +1,8 @@
-/* eslint-disable camelcase */
+'use client'
+
 import * as Dialog from '@radix-ui/react-dialog'
 import { CloseButton, Content, Overlay, PlayerCaptain, PlayerContainer, TableContainer, TeamContainer } from './styles'
-import { ArrowCircleDown, ArrowCircleUp, X } from 'phosphor-react'
+import { ArrowCircleDown, ArrowCircleUp, X } from '@phosphor-icons/react'
 import { UserTeamInfo } from '../../../../components/UserTeamInfo'
 import { DefaultTable } from '../../../../components/DefaultTable'
 import { useTeamPlayers } from '../../../../hooks/useTeamPlayers'

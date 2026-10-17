@@ -1,4 +1,5 @@
-/* eslint-disable camelcase */
+'use client'
+
 // import * as Select from '@radix-ui/react-select'
 import { useContext } from 'react'
 
@@ -17,7 +18,7 @@ import {
     // SelectTrigger,
     // SelectViewPort,
 } from './styles'
-// import { CaretDown, CaretUp, Check } from 'phosphor-react'
+// import { CaretDown, CaretUp, Check } from '@phosphor-icons/react'
 
 const MarketStateCloseTypes = {
     CLOSE: 'Fecha',

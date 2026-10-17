@@ -1,3 +1,5 @@
+'use client'
+
 import styled from 'styled-components'
 
 export const TeamsContainer = styled.div`
@@ -46,6 +48,6 @@ export const TeamPreviousGameStatus = styled.div<TeamPreviousGameStatusProps>`
         props.$status === TeamPreviousGameStauts.victory
             ? props.theme['green-500']
             : props.$status === TeamPreviousGameStauts.lose
-            ? props.theme['red-500']
-            : props.theme['gray-500']};
+              ? props.theme['red-500']
+              : props.theme['gray-500']};
 `

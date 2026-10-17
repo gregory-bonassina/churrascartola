@@ -1,3 +1,5 @@
+'use client'
+
 import { useContext } from 'react'
 import { Select } from '../../../../components/Select'
 import { TeamsContext } from '../../../../contexts/TeamsContext'

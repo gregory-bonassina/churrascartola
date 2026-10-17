@@ -1,3 +1,5 @@
+'use client'
+
 import { ReactNode, createContext, useEffect, useState } from 'react'
 import { apiCartola } from '../lib/axios'
 
@@ -80,8 +82,8 @@ export function PlayersProvider({ children }: AllScoredPlayersProviderProps) {
     }
 
     useEffect(() => {
-        loadAllScoredPlayers()
-        loadAllPlayers()
+        loadAllScoredPlayers().catch(() => {})
+        loadAllPlayers().catch(() => {})
     }, [])
 
     return <PlayersContext.Provider value={{ allScoredPlayers, allPlayers }}>{children}</PlayersContext.Provider>

@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { AvatarContainer, NamesContainer, UserContainer } from './styles'
 
 interface UserTeamInfoProps {

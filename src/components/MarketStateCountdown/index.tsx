@@ -1,5 +1,7 @@
+'use client'
+
 import { differenceInSeconds, intervalToDuration } from 'date-fns'
-import { Timer } from 'phosphor-react'
+import { Timer } from '@phosphor-icons/react'
 import { useEffect, useState } from 'react'
 
 interface MarketStateCountdownProps {
@@ -23,19 +25,29 @@ export function MarketStateCountdown({ closeMarketTimestamp }: MarketStateCountd
     const formattedDateWithDays = `${duration.days ? duration.days : 0}D ${formattedDate}`
 
     useEffect(() => {
-        const interval = setInterval(() => {
+        const updateCountdown = () => {
             const dateNow = new Date()
             const dateMarketClose = new Date(closeMaketDateTime)
 
-            const secondsDifference = differenceInSeconds(dateNow, dateMarketClose)
-
             if (dateNow.getTime() <= dateMarketClose.getTime()) {
-                setAmountSecondsPassed(secondsDifference)
-            } else {
-                setAmountSecondsPassed(0)
+                setAmountSecondsPassed(differenceInSeconds(dateMarketClose, dateNow))
+                return true
+            }
+
+            setAmountSecondsPassed(0)
+            return false
+        }
+
+        if (!updateCountdown()) {
+            return
+        }
+
+        const interval = setInterval(() => {
+            if (!updateCountdown()) {
                 clearInterval(interval)
             }
         }, 1000)
+
         return () => {
             clearInterval(interval)
         }

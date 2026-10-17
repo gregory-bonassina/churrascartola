@@ -1,3 +1,5 @@
+'use client'
+
 import { ReactNode, createContext, useCallback, useEffect, useState } from 'react'
 import { apiCartola } from '../lib/axios'
 
@@ -53,7 +55,7 @@ export function MarketStateProvider({ children }: MarketStateProviderProps) {
     }, [])
 
     useEffect(() => {
-        loadMarket()
+        loadMarket().catch(() => {})
     }, [loadMarket])
 
     return <MarketStateContext.Provider value={market}>{children}</MarketStateContext.Provider>

@@ -1,5 +1,6 @@
-/* eslint-disable camelcase */
-import { useContext, useEffect, useState } from 'react'
+'use client'
+
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { PlayersContext } from '../contexts/PlayersContext'
 import { apiCartola } from '../lib/axios'
 
@@ -25,9 +26,15 @@ interface SubstitutionsProps {
     saiu: PlayerProps
 }
 
+const sortPlayers = (players: PlayerProps[]) => {
+    return [...players].sort(function (a, b) {
+        return a.posicao_id < b.posicao_id ? -1 : a.posicao_id > b.posicao_id ? 1 : 0
+    })
+}
+
 export const useTeamPlayers = (time_id: number) => {
     const { allScoredPlayers } = useContext(PlayersContext)
-    const [teamPlayers, setTeamPlayers] = useState<TeamProps>({
+    const [loadedTeam, setLoadedTeam] = useState<TeamProps>({
         atletas: [],
         reservas: [],
         capitao_id: 0,
@@ -35,10 +42,14 @@ export const useTeamPlayers = (time_id: number) => {
     const [substituitions, setSubstituitions] = useState<SubstitutionsProps[]>([])
 
     useEffect(() => {
+        let ignore = false
+
         const loadTeamPlayers = async () => {
             const response = await apiCartola.get(`time/id/${time_id}`)
 
-            setTeamPlayers(response.data)
+            if (!ignore) {
+                setLoadedTeam(response.data)
+            }
         }
 
         const loadSubstituitions = async () => {
@@ -46,43 +57,38 @@ export const useTeamPlayers = (time_id: number) => {
 
             const data = response.data
 
-            if (data) {
+            if (data && !ignore) {
                 setSubstituitions(data)
             }
         }
 
-        loadTeamPlayers()
-        loadSubstituitions()
+        loadTeamPlayers().catch(() => {})
+        loadSubstituitions().catch(() => {})
+
+        return () => {
+            ignore = true
+        }
     }, [time_id])
 
-    teamPlayers.atletas = teamPlayers.atletas.map((atleta) => {
-        const subs = substituitions.find((substituition) => substituition.saiu.atleta_id === atleta.atleta_id)
+    const teamPlayers = useMemo<TeamProps>(() => {
+        const atletas = (loadedTeam.atletas ?? []).map((atleta) => {
+            const subs = substituitions.find((substituition) => substituition.saiu.atleta_id === atleta.atleta_id)
 
-        if (subs) {
-            return { ...subs.entrou, entrou: true }
-        }
-
-        return atleta
-    })
-
-    teamPlayers.reservas = teamPlayers.reservas?.map((atleta) => {
-        const subs = substituitions.find((substituition) => substituition.entrou.atleta_id === atleta.atleta_id)
-
-        if (subs) {
-            return { ...subs.saiu, saiu: true }
-        }
-
-        return atleta
-    })
-
-    const sortPlayers = (players: PlayerProps[]) => {
-        players?.sort(function (a, b) {
-            return a.posicao_id < b.posicao_id ? -1 : a.posicao_id > b.posicao_id ? 1 : 0
+            return subs ? { ...subs.entrou, entrou: true } : atleta
         })
-    }
 
-    sortPlayers(teamPlayers.atletas)
-    sortPlayers(teamPlayers.reservas)
+        const reservas = (loadedTeam.reservas ?? []).map((atleta) => {
+            const subs = substituitions.find((substituition) => substituition.entrou.atleta_id === atleta.atleta_id)
+
+            return subs ? { ...subs.saiu, saiu: true } : atleta
+        })
+
+        return {
+            ...loadedTeam,
+            atletas: sortPlayers(atletas),
+            reservas: sortPlayers(reservas),
+        }
+    }, [loadedTeam, substituitions])
 
     return [allScoredPlayers, teamPlayers] as const
 }

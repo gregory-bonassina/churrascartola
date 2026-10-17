@@ -1,3 +1,5 @@
+'use client'
+
 import { css } from 'styled-components'
 import { Interpolation, RuleSet, Styles } from 'styled-components/dist/types'
 
